@@ -32,7 +32,7 @@ class IssueController extends Controller
             $query->where('category', $request->category);
         }
 
-        $issues = $query->orderByRaw("FIELD(urgency, 'Mendesak (Blokir Progress)', 'Tinggi (Berpotensi Terlambat)', 'Sedang') ASC")
+        $issues = $query->orderByRaw("CASE urgency WHEN 'Mendesak (Blokir Progress)' THEN 1 WHEN 'Tinggi (Berpotensi Terlambat)' THEN 2 WHEN 'Sedang' THEN 3 ELSE 4 END ASC")
             ->orderBy('target_date', 'asc')
             ->get();
 

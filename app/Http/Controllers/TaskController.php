@@ -53,7 +53,7 @@ class TaskController extends Controller
         $sort = $request->query('sort', 'deadline_asc');
         switch ($sort) {
             case 'priority_desc':
-                $query->orderByRaw("FIELD(priority, 'Kritis', 'Tinggi', 'Sedang', 'Rendah') ASC");
+                $query->orderByRaw("CASE priority WHEN 'Kritis' THEN 1 WHEN 'Tinggi' THEN 2 WHEN 'Sedang' THEN 3 WHEN 'Rendah' THEN 4 ELSE 5 END ASC");
                 break;
             case 'progress_asc':
                 $query->orderBy('progress', 'asc');
@@ -63,7 +63,7 @@ class TaskController extends Controller
                 break;
             case 'deadline_asc':
             default:
-                $query->orderByRaw('deadline IS NULL, deadline ASC');
+                $query->orderByRaw('CASE WHEN deadline IS NULL THEN 1 ELSE 0 END, deadline ASC');
                 break;
         }
 

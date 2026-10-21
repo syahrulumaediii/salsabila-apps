@@ -53,10 +53,10 @@ class MatrixController extends Controller
         $sort = $request->query('sort', 'group');
         switch ($sort) {
             case 'deadline':
-                $query->orderByRaw('deadline IS NULL, deadline ASC');
+                $query->orderByRaw('CASE WHEN deadline IS NULL THEN 1 ELSE 0 END, deadline ASC');
                 break;
             case 'priority':
-                $query->orderByRaw("FIELD(priority, 'Kritis', 'Tinggi', 'Sedang', 'Rendah') ASC");
+                $query->orderByRaw("CASE priority WHEN 'Kritis' THEN 1 WHEN 'Tinggi' THEN 2 WHEN 'Sedang' THEN 3 WHEN 'Rendah' THEN 4 ELSE 5 END ASC");
                 break;
             case 'progress':
                 $query->orderBy('progress', 'desc');
@@ -64,7 +64,7 @@ class MatrixController extends Controller
             case 'group':
             default:
                 $query->orderBy('project_id', 'asc')
-                    ->orderByRaw("FIELD(stage, 'A. KONTRAK', 'B. PERENCANAAN', 'C. PELAKSANAAN / PENGAWASAN', 'D. PENAGIHAN') ASC");
+                    ->orderByRaw("CASE stage WHEN 'A. KONTRAK' THEN 1 WHEN 'B. PERENCANAAN' THEN 2 WHEN 'C. PELAKSANAAN / PENGAWASAN' THEN 3 WHEN 'D. PENAGIHAN' THEN 4 ELSE 5 END ASC");
                 break;
         }
 
