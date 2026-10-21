@@ -1,0 +1,3434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SALSABILA CONTROL CENTER — Team Leader Dashboard</title>
+  <meta name="description" content="SALSABILA CONTROL CENTER — Team Leader Dashboard & Project Control System untuk CV. Design Salsabila" />
+  <meta property="og:title" content="SALSABILA CONTROL CENTER — Team Leader Dashboard" />
+  <meta property="og:description" content="SALSABILA CONTROL CENTER — Team Leader Dashboard & Project Control System untuk CV. Design Salsabila" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    .nav-btn.active {
+      background-color: #0f172a;
+      color: #ffffff;
+      border-left: 4px solid #38bdf8;
+    }
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(2px);
+    }
+    @media print {
+      .no-print { display: none !important; }
+      #main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+      body { background: #fff !important; }
+      .print-break { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+
+  <!-- SIDEBAR NAVIGASI -->
+  <aside class="w-72 bg-slate-900 text-slate-300 flex flex-col justify-between shrink-0 no-print select-none">
+    <div>
+      <!-- Brand Header -->
+      <div class="p-5 border-b border-slate-800 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold text-lg shadow">
+          <i class="fa-solid fa-compass-drafting"></i>
+        </div>
+        <div>
+          <h1 class="text-white font-extrabold text-sm tracking-wide leading-tight">SALSABILA CONTROL CENTER</h1>
+          <p class="text-[11px] text-sky-400 font-medium">CV. Design Salsabila</p>
+        </div>
+      </div>
+
+      <!-- Role Info -->
+      <div class="px-5 py-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between text-xs">
+        <span class="text-slate-400">Mode Kendali:</span>
+        <span class="px-2 py-0.5 bg-sky-500/20 text-sky-300 rounded font-semibold">Team Leader</span>
+      </div>
+
+      <!-- Menu List -->
+      <nav class="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-220px)]" id="sidebar-nav">
+        <button onclick="switchTab('dashboard')" data-tab="dashboard" class="nav-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-chart-pie w-4 text-center"></i> Dashboard Utama</span>
+          <span id="nav-badge-alerts" class="px-1.5 py-0.5 text-[10px] rounded-full bg-rose-600 text-white font-bold hidden">0</span>
+        </button>
+
+        <button onclick="switchTab('today')" data-tab="today" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-calendar-day w-4 text-center"></i> Agenda Hari Ini</span>
+          <span id="nav-badge-today" class="px-1.5 py-0.5 text-[10px] rounded-full bg-amber-500 text-slate-950 font-bold">0</span>
+        </button>
+
+        <button onclick="switchTab('todos')" data-tab="todos" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-list-check w-4 text-center"></i> To-Do List & Tugas</span>
+          <span id="nav-badge-todos" class="px-1.5 py-0.5 text-[10px] rounded-full bg-slate-700 text-slate-200 font-bold">0</span>
+        </button>
+
+        <button onclick="switchTab('matrix')" data-tab="matrix" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-table-cells w-4 text-center"></i> Matriks Pekerjaan</span>
+        </button>
+
+        <button onclick="switchTab('projects')" data-tab="projects" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-building-shield w-4 text-center"></i> Monitoring Proyek</span>
+        </button>
+
+        <button onclick="switchTab('team')" data-tab="team" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-users-gear w-4 text-center"></i> Kontrol Tim & PIC</span>
+        </button>
+
+        <button onclick="switchTab('review')" data-tab="review" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-clipboard-check w-4 text-center"></i> Pemeriksaan & Revisi</span>
+          <span id="nav-badge-review" class="px-1.5 py-0.5 text-[10px] rounded-full bg-purple-500 text-white font-bold">0</span>
+        </button>
+
+        <button onclick="switchTab('issues')" data-tab="issues" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-triangle-exclamation w-4 text-center"></i> Kendala & Keputusan</span>
+          <span id="nav-badge-issues" class="px-1.5 py-0.5 text-[10px] rounded-full bg-rose-500 text-white font-bold">0</span>
+        </button>
+
+        <button onclick="switchTab('billing')" data-tab="billing" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-file-invoice-dollar w-4 text-center"></i> Penagihan & Termin</span>
+        </button>
+
+        <button onclick="switchTab('reports')" data-tab="reports" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium hover:bg-slate-800 transition">
+          <span class="flex items-center gap-3"><i class="fa-solid fa-file-export w-4 text-center"></i> Laporan & Cadangan Data</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Footer Storage Info -->
+    <div class="p-4 border-t border-slate-800 text-[11px] text-slate-400 space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Penyimpanan Lokal Aktif</span>
+        <button onclick="switchTab('reports')" class="text-sky-400 hover:underline">Backup</button>
+      </div>
+      <div class="text-[10px] text-slate-500">Zona Waktu: WIB (Asia/Jakarta)</div>
+    </div>
+  </aside>
+
+  <!-- AREA UTAMA -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <!-- TOP HEADER -->
+    <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 shrink-0 no-print">
+      <div>
+        <h2 id="page-title" class="text-lg font-bold text-slate-800">Dashboard Utama</h2>
+        <p id="page-subtitle" class="text-xs text-slate-500">Team Leader Dashboard — Project & Task Management</p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Global Quick Search -->
+        <div class="relative w-64">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+          <input id="global-search" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Cari tugas, proyek, PIC..." class="w-full pl-8 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs focus:outline-none focus:bg-white focus:border-sky-500" />
+        </div>
+
+        <!-- Quick Action Button -->
+        <button onclick="openTaskModal()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+          <i class="fa-solid fa-plus"></i> Tugas Baru
+        </button>
+
+        <!-- Date & Time WIB -->
+        <div class="text-right border-l border-slate-200 pl-4">
+          <div id="live-date" class="text-xs font-bold text-slate-700">-</div>
+          <div id="live-time" class="text-[11px] text-slate-500 font-mono">- WIB</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT CONTAINER -->
+    <main id="main-content" class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <!-- ==========================================
+           1. HALAMAN DASHBOARD UTAMA
+           ========================================== -->
+      <section id="view-dashboard" class="tab-view space-y-6">
+        <!-- Baris 8 Kartu Statistik Utama -->
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3" id="dashboard-stat-cards"></div>
+
+        <!-- Sistem Peringatan Visual Otomatis -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+              <i class="fa-solid fa-bell text-rose-500"></i> Radar Peringatan & Deteksi Dini Otomatis
+            </h3>
+            <span class="text-[11px] text-slate-400">Dihitung otomatis dari data aktual</span>
+          </div>
+          <div id="dashboard-warnings-bar" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Bagian Khusus: PERHATIAN TEAM LEADER -->
+        <div class="bg-white rounded-xl border-2 border-rose-500/20 shadow-sm overflow-hidden">
+          <div class="bg-slate-900 text-white px-5 py-3 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="px-2 py-0.5 bg-rose-500 text-white rounded text-xs font-bold">PRIORITAS KENDALI</span>
+              <h3 class="text-sm font-bold tracking-wide">PERHATIAN TEAM LEADER</h3>
+            </div>
+            <p class="text-xs text-slate-300">Pekerjaan terlambat, deadline hari ini, menunggu pemeriksaan, terhambat, & butuh keputusan segera</p>
+          </div>
+          <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4" id="tl-attention-grid"></div>
+        </div>
+
+        <!-- Grafik Progress Proyek & Beban Kerja PIC -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Grafik Progress Keseluruhan Proyek -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-sm font-bold text-slate-800">Progress Keseluruhan Proyek (Berbobot)</h3>
+                <p class="text-xs text-slate-500">Target vs Realisasi Aktual Berdasarkan Bobot Pekerjaan</p>
+              </div>
+              <button onclick="switchTab('projects')" class="text-xs text-sky-600 font-semibold hover:underline">Detail Proyek</button>
+            </div>
+            <div id="dashboard-project-chart" class="space-y-4"></div>
+          </div>
+
+          <!-- Ringkasan Pekerjaan Berdasarkan PIC -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-sm font-bold text-slate-800">Distribusi & Progress Pekerjaan per PIC</h3>
+                <p class="text-xs text-slate-500">Pantau beban kerja aktif, selesai, dan keterlambatan</p>
+              </div>
+              <button onclick="switchTab('team')" class="text-xs text-sky-600 font-semibold hover:underline">Kontrol Tim</button>
+            </div>
+            <div id="dashboard-pic-chart" class="space-y-3"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           2. HALAMAN AGENDA HARI INI
+           ========================================== -->
+      <section id="view-today" class="tab-view hidden space-y-6">
+        <!-- Pemilihan Tanggal Agenda -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold">
+              <i class="fa-solid fa-calendar-check text-lg"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-800">Tanggal Kendali Agenda Harian</h3>
+              <p class="text-xs text-slate-500">Lihat agenda aktual hari ini, tinjau histori, atau susun rencana besok</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="date" id="agenda-date-picker" onchange="renderTodayView()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700" />
+            <button onclick="setAgendaDateToday()" class="px-3 py-1.5 bg-slate-800 text-white rounded-lg text-xs font-medium hover:bg-slate-700">Hari Ini (Aktual)</button>
+          </div>
+        </div>
+
+        <!-- 3 PRIORITAS UTAMA HARI INI -->
+        <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-xl p-5 shadow-md">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-amber-400">FOKUS EKSEKUSI TEAM LEADER</span>
+              <h3 class="text-base font-bold">3 PRIORITAS UTAMA HARI INI</h3>
+            </div>
+            <span class="text-xs text-slate-300">Pilih 3 pekerjaan paling krusial yang wajib tuntas hari ini</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="top-3-priorities-container"></div>
+        </div>
+
+        <!-- Grid Kategori Otomatis Agenda Hari Ini -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="today-categories-grid"></div>
+
+        <!-- Checklist Harian Kustom Team Leader & Evaluasi Akhir Hari -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Checklist Harian Team Leader -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 mb-1">Checklist Harian Pribadi Team Leader</h3>
+            <p class="text-xs text-slate-500 mb-4">Centang rutinitas kontrol atau tindak lanjut cepat kepada owner/instansi/rekan kerja</p>
+            <div class="flex gap-2 mb-4">
+              <input type="text" id="new-daily-check-input" placeholder="Tambah agenda tindak lanjut / checklist harian..." class="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-xs" onkeydown="if(event.key==='Enter') addDailyCheckItem()" />
+              <button onclick="addDailyCheckItem()" class="px-4 py-2 bg-sky-600 text-white rounded-lg text-xs font-semibold hover:bg-sky-700">Tambah</button>
+            </div>
+            <div id="daily-custom-checklist" class="space-y-2 max-h-72 overflow-y-auto"></div>
+          </div>
+
+          <!-- Evaluasi Akhir Hari -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h3 class="text-sm font-bold text-slate-800">Evaluasi Akhir Hari (Closing Review)</h3>
+                <p class="text-xs text-slate-500">Tersimpan otomatis per tanggal agenda yang dipilih</p>
+              </div>
+              <span id="eval-saved-badge" class="text-[11px] text-emerald-600 font-semibold hidden"><i class="fa-solid fa-check"></i> Tersimpan</span>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="font-semibold text-slate-700 block mb-1">1. Apa yang berhasil diselesaikan hari ini?</label>
+                <textarea id="eval-q1" rows="2" oninput="saveDailyEvaluation()" class="w-full p-2 border border-slate-300 rounded-lg" placeholder="Catat pencapaian utama hari ini..."></textarea>
+              </div>
+              <div>
+                <label class="font-semibold text-slate-700 block mb-1">2. Apa yang belum selesai?</label>
+                <textarea id="eval-q2" rows="2" oninput="saveDailyEvaluation()" class="w-full p-2 border border-slate-300 rounded-lg" placeholder="Pekerjaan yang masih menggantung..."></textarea>
+              </div>
+              <div>
+                <label class="font-semibold text-slate-700 block mb-1">3. Apa kendalanya?</label>
+                <textarea id="eval-q3" rows="2" oninput="saveDailyEvaluation()" class="w-full p-2 border border-slate-300 rounded-lg" placeholder="Hambatan teknis, data, atau eksternal..."></textarea>
+              </div>
+              <div>
+                <label class="font-semibold text-slate-700 block mb-1">4. Siapa yang perlu ditindaklanjuti (Owner/Instansi/Tim)?</label>
+                <input type="text" id="eval-q4" oninput="saveDailyEvaluation()" class="w-full p-2 border border-slate-300 rounded-lg" placeholder="Nama PPK, Klien, atau Anggota Tim..." />
+              </div>
+              <div>
+                <label class="font-semibold text-slate-700 block mb-1">5. Apa prioritas untuk besok?</label>
+                <textarea id="eval-q5" rows="2" oninput="saveDailyEvaluation()" class="w-full p-2 border border-slate-300 rounded-lg" placeholder="Target utama esok hari..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           3. HALAMAN TO-DO LIST & SUB-CHECKLIST
+           ========================================== -->
+      <section id="view-todos" class="tab-view hidden space-y-5">
+        <!-- Filter & Action Bar -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+              <input type="text" id="todo-search" oninput="renderTodosView()" placeholder="Cari nama pekerjaan / kendala..." class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs w-56" />
+              <select id="todo-filter-project" onchange="renderTodosView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white"></select>
+              <select id="todo-filter-divisi" onchange="renderTodosView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white">
+                <option value="ALL">Semua Divisi</option>
+                <option value="Struktur">Struktur</option>
+                <option value="Arsitektur">Arsitektur</option>
+                <option value="MEP">MEP</option>
+                <option value="Estimasi & RAB">Estimasi & RAB</option>
+                <option value="Survey & Pengawasan">Survey & Pengawasan</option>
+                <option value="Administrasi & Kontrak">Administrasi & Kontrak</option>
+              </select>
+              <select id="todo-filter-pic" onchange="renderTodosView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white"></select>
+              <select id="todo-filter-status" onchange="renderTodosView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white">
+                <option value="ALL">Semua Status</option>
+                <option value="Belum Dimulai">Belum Dimulai</option>
+                <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
+                <option value="Menunggu Pemeriksaan">Menunggu Pemeriksaan</option>
+                <option value="Revisi">Revisi</option>
+                <option value="Terhambat">Terhambat</option>
+                <option value="Selesai">Selesai</option>
+              </select>
+              <select id="todo-filter-priority" onchange="renderTodosView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white">
+                <option value="ALL">Semua Prioritas</option>
+                <option value="Kritis">Kritis</option>
+                <option value="Tinggi">Tinggi</option>
+                <option value="Sedang">Sedang</option>
+                <option value="Rendah">Rendah</option>
+              </select>
+              <select id="todo-sort" onchange="renderTodosView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-slate-50 font-medium">
+                <option value="deadline_asc">Urutkan: Deadline Terdekat</option>
+                <option value="priority_desc">Urutkan: Prioritas Tertinggi</option>
+                <option value="progress_asc">Urutkan: Progress Terendah</option>
+                <option value="progress_desc">Urutkan: Progress Tertinggi</option>
+              </select>
+            </div>
+            <button onclick="openTaskModal()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i> Tambah Pekerjaan
+            </button>
+          </div>
+        </div>
+
+        <!-- Daftar Kartu/Tabel Interaktif Pekerjaan & Sub-Checklist -->
+        <div id="todos-list-container" class="space-y-3"></div>
+      </section>
+
+      <!-- ==========================================
+           4. HALAMAN MATRIKS PEKERJAAN
+           ========================================== -->
+      <section id="view-matrix" class="tab-view hidden space-y-5">
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="text-sm font-bold text-slate-800">Matriks Kendali Aktivitas Perusahaan (4 Tahapan Bisnis Konsultan)</h3>
+              <p class="text-xs text-slate-500">A. Kontrak &bull; B. Perencanaan &bull; C. Pelaksanaan/Pengawasan &bull; D. Penagihan</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <input type="text" id="matrix-search" oninput="renderMatrixView()" placeholder="Cari di matriks..." class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs" />
+              <select id="matrix-filter-project" onchange="renderMatrixView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white"></select>
+              <select id="matrix-filter-stage" onchange="renderMatrixView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white">
+                <option value="ALL">Semua Tahapan (A-D)</option>
+                <option value="A. KONTRAK">A. KONTRAK</option>
+                <option value="B. PERENCANAAN">B. PERENCANAAN</option>
+                <option value="C. PELAKSANAAN / PENGAWASAN">C. PELAKSANAAN / PENGAWASAN</option>
+                <option value="D. PENAGIHAN">D. PENAGIHAN</option>
+              </select>
+              <select id="matrix-filter-pic" onchange="renderMatrixView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white"></select>
+              <select id="matrix-filter-status" onchange="renderMatrixView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white">
+                <option value="ALL">Semua Status</option>
+                <option value="Belum Dimulai">Belum Dimulai</option>
+                <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
+                <option value="Menunggu Pemeriksaan">Menunggu Pemeriksaan</option>
+                <option value="Revisi">Revisi</option>
+                <option value="Terhambat">Terhambat</option>
+                <option value="Selesai">Selesai</option>
+              </select>
+              <input type="date" id="matrix-date-from" onchange="renderMatrixView()" title="Dari Tanggal Deadline" class="px-2 py-1 border border-slate-300 rounded-lg text-xs" />
+              <input type="date" id="matrix-date-to" onchange="renderMatrixView()" title="Sampai Tanggal Deadline" class="px-2 py-1 border border-slate-300 rounded-lg text-xs" />
+              <select id="matrix-sort" onchange="renderMatrixView()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-slate-50 font-semibold">
+                <option value="group">Kelompokkan Proyek & Tahapan</option>
+                <option value="deadline">Urut Deadline</option>
+                <option value="priority">Urut Prioritas</option>
+                <option value="progress">Urut Progress</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-900 text-white uppercase text-[11px]">
+                <th class="p-3">Proyek</th>
+                <th class="p-3">Tahapan</th>
+                <th class="p-3">Pekerjaan & Sub-Tahap</th>
+                <th class="p-3">PIC & Tim</th>
+                <th class="p-3">Deadline</th>
+                <th class="p-3 w-36">Progress (Bobot)</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Kendala</th>
+                <th class="p-3">Tindakan Berikutnya</th>
+                <th class="p-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="matrix-table-body" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           5. HALAMAN MONITORING PROGRESS PROYEK
+           ========================================== -->
+      <section id="view-projects" class="tab-view hidden space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Portofolio & Monitoring Detail Proyek</h3>
+            <p class="text-xs text-slate-500">Progress proyek dihitung secara otomatis berdasarkan <strong>Bobot Pekerjaan</strong> masing-masing tugas</p>
+          </div>
+          <button onclick="openProjectModal()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-folder-plus"></i> Tambah Proyek Baru
+          </button>
+        </div>
+
+        <div id="projects-detail-container" class="space-y-6"></div>
+      </section>
+
+      <!-- ==========================================
+           6. HALAMAN KONTROL TIM & PEMBAGIAN TUGAS
+           ========================================== -->
+      <section id="view-team" class="tab-view hidden space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Kontrol Anggota Tim, Beban Kerja & Evaluasi Objektif</h3>
+            <p class="text-xs text-slate-500">Evaluasi berbasis ketepatan deadline, penyelesaian tugas, perubahan progress, dan kendala yang dilaporkan</p>
+          </div>
+          <button onclick="openMemberModal()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-user-plus"></i> Tambah Anggota Tim
+          </button>
+        </div>
+
+        <div id="team-cards-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+      </section>
+
+      <!-- ==========================================
+           7. HALAMAN PEMERIKSAAN DAN REVISI (QC GATE)
+           ========================================== -->
+      <section id="view-review" class="tab-view hidden space-y-6">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Meja Pemeriksaan Kualitas & Persetujuan Team Leader (Quality Control Gate)</h3>
+            <p class="text-xs text-slate-500">Pekerjaan tidak sah berstatus <strong>Selesai</strong> sebelum lulus verifikasi checklist pemeriksaan dan disetujui Team Leader</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="review-filter-mode" onchange="renderReviewView()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white font-medium">
+              <option value="NEED_REVIEW">Menunggu Pemeriksaan & Revisi</option>
+              <option value="ALL">Seluruh Pekerjaan (Audit QC)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="review-list-container" class="space-y-4"></div>
+      </section>
+
+      <!-- ==========================================
+           8. HALAMAN KENDALA DAN KEPUTUSAN
+           ========================================== -->
+      <section id="view-issues" class="tab-view hidden space-y-6">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Log Kendala Lapangan/Teknis & Keputusan Team Leader</h3>
+            <p class="text-xs text-slate-500">Diurutkan otomatis dari kendala paling mendesak yang membutuhkan keputusan atau intervensi Team Leader</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="issue-filter-category" onchange="renderIssuesView()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white">
+              <option value="ALL">Semua Kategori Kendala</option>
+              <option value="Menunggu keputusan Team Leader">Menunggu keputusan Team Leader</option>
+              <option value="Kendala teknis">Kendala teknis</option>
+              <option value="Kendala administrasi">Kendala administrasi</option>
+              <option value="Kendala komunikasi">Kendala komunikasi</option>
+              <option value="Kendala sumber daya">Kendala sumber daya</option>
+              <option value="Kendala pembayaran">Kendala pembayaran</option>
+              <option value="Menunggu pihak eksternal">Menunggu pihak eksternal</option>
+            </select>
+            <button onclick="openIssueModal()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i> Catat Kendala / Keputusan
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-900 text-white uppercase text-[11px]">
+                <th class="p-3">Kategori & Urgensi</th>
+                <th class="p-3">Proyek</th>
+                <th class="p-3">Permasalahan & Dampak</th>
+                <th class="p-3">PIC & Tgl Lapor</th>
+                <th class="p-3">Keputusan yang Dibutuhkan</th>
+                <th class="p-3">Solusi / Tindakan TL</th>
+                <th class="p-3">Target Selesai</th>
+                <th class="p-3">Status Tindak Lanjut</th>
+                <th class="p-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="issues-table-body" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           9. HALAMAN PENAGIHAN DAN ARUS PEKERJAAN
+           ========================================== -->
+      <section id="view-billing" class="tab-view hidden space-y-6">
+        <!-- Ringkasan Finansial & Piutang -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="billing-summary-cards"></div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Monitoring Administrasi Termin & Penagihan Proyek</h3>
+            <p class="text-xs text-slate-500">Status Pekerjaan Teknis dipisahkan dari Status Pembayaran agar proyek yang sudah selesai teknis namun belum cair tetap terpantau</p>
+          </div>
+          <button onclick="openBillingModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-plus"></i> Tambah Termin / Tagihan
+          </button>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-900 text-white uppercase text-[11px]">
+                <th class="p-3">Proyek & Klien</th>
+                <th class="p-3">Nilai Kontrak</th>
+                <th class="p-3">Termin & Nilai Tagihan</th>
+                <th class="p-3">Status Teknis Proyek</th>
+                <th class="p-3">Status Dokumen & Tgl Ajuan</th>
+                <th class="p-3">Status Pembayaran</th>
+                <th class="p-3">Sudah Diterima</th>
+                <th class="p-3">Sisa Tagihan</th>
+                <th class="p-3">PIC & Follow-Up Berikutnya</th>
+                <th class="p-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="billing-table-body" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           10. HALAMAN LAPORAN & CADANGAN DATA
+           ========================================== -->
+      <section id="view-reports" class="tab-view hidden space-y-6">
+        <!-- Panel Kontrol Laporan & Ekspor -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm no-print space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h3 class="text-sm font-bold text-slate-800">Generator Laporan Eksekutif Team Leader</h3>
+              <p class="text-xs text-slate-500">Filter berdasarkan periode (Harian, Mingguan, Bulanan), Proyek, dan PIC</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="window.print()" class="px-3.5 py-2 bg-slate-900 text-white rounded-lg text-xs font-semibold flex items-center gap-2 hover:bg-slate-800">
+                <i class="fa-solid fa-print"></i> Cetak Laporan / PDF
+              </button>
+              <button onclick="exportTasksCSV()" class="px-3.5 py-2 bg-sky-600 text-white rounded-lg text-xs font-semibold flex items-center gap-2 hover:bg-sky-700">
+                <i class="fa-solid fa-file-csv"></i> Ekspor CSV Pekerjaan
+              </button>
+              <button onclick="exportReportExcel()" class="px-3.5 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold flex items-center gap-2 hover:bg-emerald-700">
+                <i class="fa-solid fa-file-excel"></i> Ekspor Tabel Excel (.xls)
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-slate-100">
+            <div>
+              <label class="text-[11px] font-semibold text-slate-600 block mb-1">Periode Laporan</label>
+              <select id="report-period" onchange="renderReportsView()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs">
+                <option value="ALL">Seluruh Periode Aktif</option>
+                <option value="DAILY">Laporan Harian (Hari Ini)</option>
+                <option value="WEEKLY">Laporan Mingguan (±7 Hari)</option>
+                <option value="MONTHLY">Laporan Bulanan (Bulan Ini)</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[11px] font-semibold text-slate-600 block mb-1">Filter Proyek</label>
+              <select id="report-project" onchange="renderReportsView()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs"></select>
+            </div>
+            <div>
+              <label class="text-[11px] font-semibold text-slate-600 block mb-1">Filter PIC / Penanggung Jawab</label>
+              <select id="report-pic" onchange="renderReportsView()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs"></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Manajemen Penyimpanan & Pencadangan Data (Backup/Restore) -->
+        <div class="bg-slate-900 text-white p-5 rounded-xl shadow-sm no-print">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h3 class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-database text-sky-400"></i> Manajemen Database Lokal & Pencadangan (Backup / Restore)</h3>
+              <p class="text-xs text-slate-300 mt-0.5">Seluruh data tersimpan otomatis di browser perangkat Anda (LocalStorage). Unduh file cadangan JSON secara berkala untuk memindahkan data antar laptop.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="downloadBackupJSON()" class="px-3 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5">
+                <i class="fa-solid fa-download"></i> Unduh Backup (.json)
+              </button>
+              <label class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-upload"></i> Pulihkan Data (.json)
+                <input type="file" accept=".json" onchange="restoreBackupJSON(event)" class="hidden" />
+              </label>
+              <button onclick="resetToSampleData()" class="px-3 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-semibold">
+                Muat Ulang Data Contoh
+              </button>
+              <button onclick="clearAllData()" class="px-3 py-2 bg-rose-600/30 hover:bg-rose-600/50 text-rose-200 border border-rose-500/40 rounded-lg text-xs font-semibold">
+                Kosongkan Semua Data
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Area Dokumen Laporan yang Siap Dicetak -->
+        <div id="printable-report-area" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==========================================
+       MODAL FORMULIR PEKERJAAN (TAMBAH / EDIT)
+       ========================================== -->
+  <div id="modal-task" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200">
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between sticky top-0 z-10">
+        <h3 id="modal-task-title" class="text-sm font-bold">Tambah Pekerjaan Baru</h3>
+        <button onclick="closeTaskModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form id="form-task" onsubmit="saveTaskForm(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="task-id" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Nama Pekerjaan *</label>
+            <input type="text" id="task-name" required class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Contoh: Perhitungan Struktur Atas Gedung Serbaguna (SAP2000)" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Proyek *</label>
+            <select id="task-project" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white"></select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Tahapan Bisnis Konsultan *</label>
+            <select id="task-stage" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="A. KONTRAK">A. KONTRAK</option>
+              <option value="B. PERENCANAAN">B. PERENCANAAN</option>
+              <option value="C. PELAKSANAAN / PENGAWASAN">C. PELAKSANAAN / PENGAWASAN</option>
+              <option value="D. PENAGIHAN">D. PENAGIHAN</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Sub-Tahapan Konsultan</label>
+            <select id="task-substage" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Persiapan administrasi">A1 - Persiapan administrasi</option>
+              <option value="Kontrak dan dokumen pendukung">A2 - Kontrak dan dokumen pendukung</option>
+              <option value="Monitoring kelengkapan dokumen">A3 - Monitoring kelengkapan dokumen</option>
+              <option value="Pengumpulan data">B1 - Pengumpulan data</option>
+              <option value="Survei dan analisis">B2 - Survei dan analisis</option>
+              <option value="Perhitungan struktur">B3 - Perhitungan struktur</option>
+              <option value="Gambar perencanaan">B4 - Gambar perencanaan (DED)</option>
+              <option value="RAB dan analisis harga satuan">B5 - RAB dan analisis harga satuan (AHSP)</option>
+              <option value="Pemeriksaan internal">B6 - Pemeriksaan internal</option>
+              <option value="Revisi">B7 - Revisi</option>
+              <option value="Penyerahan dokumen">B8 - Penyerahan dokumen</option>
+              <option value="Persiapan lapangan">C1 - Persiapan lapangan</option>
+              <option value="Monitoring pekerjaan">C2 - Monitoring pekerjaan</option>
+              <option value="Laporan pengawasan">C3 - Laporan pengawasan</option>
+              <option value="Pemeriksaan hasil pekerjaan">C4 - Pemeriksaan hasil pekerjaan</option>
+              <option value="Dokumentasi lapangan">C5 - Dokumentasi lapangan</option>
+              <option value="Persyaratan penagihan">D1 - Persyaratan penagihan</option>
+              <option value="Penyusunan dokumen tagihan">D2 - Penyusunan dokumen tagihan</option>
+              <option value="Pengajuan tagihan">D3 - Pengajuan tagihan</option>
+              <option value="Monitoring pembayaran">D4 - Monitoring pembayaran</option>
+              <option value="Tindak lanjut pembayaran yang belum diterima">D5 - Tindak lanjut pembayaran</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Divisi *</label>
+            <select id="task-divisi" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Struktur">Struktur</option>
+              <option value="Arsitektur">Arsitektur</option>
+              <option value="MEP">MEP</option>
+              <option value="Estimasi & RAB">Estimasi & RAB</option>
+              <option value="Survey & Pengawasan">Survey & Pengawasan</option>
+              <option value="Administrasi & Kontrak">Administrasi & Kontrak</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">PIC Utama (Penanggung Jawab Tunggal) *</label>
+            <select id="task-pic" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white"></select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Anggota Pendukung (Opsional)</label>
+            <input type="text" id="task-support" class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Contoh: Deden (Drafter), Rina (Admin)" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Tanggal Mulai</label>
+            <input type="date" id="task-start" class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Deadline *</label>
+            <input type="date" id="task-deadline" class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Prioritas *</label>
+            <select id="task-priority" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Kritis">Kritis</option>
+              <option value="Tinggi">Tinggi</option>
+              <option value="Sedang">Sedang</option>
+              <option value="Rendah">Rendah</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Status Pekerjaan *</label>
+            <select id="task-status" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Belum Dimulai">Belum Dimulai</option>
+              <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
+              <option value="Menunggu Pemeriksaan">Menunggu Pemeriksaan</option>
+              <option value="Revisi">Revisi</option>
+              <option value="Terhambat">Terhambat</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Bobot Pekerjaan dalam Proyek (1 - 100) *</label>
+            <input type="number" id="task-weight" min="1" max="100" value="10" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Mode Perhitungan Progress</label>
+            <div class="flex items-center gap-3 mt-1">
+              <label class="flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" id="task-manual-mode" onchange="toggleManualProgressInput()" class="rounded" />
+                <span>Gunakan Progress Manual (%)</span>
+              </label>
+              <input type="number" id="task-progress" min="0" max="100" value="0" class="w-20 p-1.5 border border-slate-300 rounded-lg text-center" />
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Sub-Pekerjaan / Checklist Teknis (Pisahkan dengan baris baru)</label>
+            <textarea id="task-subtasks-text" rows="3" class="w-full p-2.5 border border-slate-300 rounded-lg font-mono text-[11px]" placeholder="Pemodelan Geometri Struktur&#10;Input Beban Gempa SNI 1726&#10;Cek Rasio Tulangan & Defleksi"></textarea>
+            <p class="text-[11px] text-slate-400 mt-0.5">Jika Mode Manual tidak dicentang, progress dihitung otomatis dari persentase checklist yang selesai.</p>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Kendala Saat Ini</label>
+            <input type="text" id="task-obstacle" class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Kosongkan jika tidak ada kendala..." />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Tindakan Selanjutnya (Next Action)</label>
+            <input type="text" id="task-next" class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Langkah konkret berikutnya..." />
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Catatan Arahan Team Leader</label>
+            <textarea id="task-notes" rows="2" class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Instruksi khusus atau standar teknis yang wajib dipatuhi..."></textarea>
+          </div>
+          <div class="md:col-span-2 flex flex-wrap gap-4 pt-2 border-t border-slate-100">
+            <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
+              <input type="checkbox" id="task-need-decision" class="rounded text-rose-600" />
+              <span>Butuh Keputusan / Bantuan Team Leader Segera</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
+              <input type="checkbox" id="task-client-followup" class="rounded text-sky-600" />
+              <span>Perlu Tindak Lanjut ke Owner / Instansi / Klien</span>
+            </label>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-slate-200">
+          <button type="button" onclick="closeTaskModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-semibold">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg font-semibold">Simpan Pekerjaan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL FORMULIR PROYEK
+       ========================================== -->
+  <div id="modal-project" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 id="modal-project-title" class="text-sm font-bold">Tambah / Edit Proyek</h3>
+        <button onclick="closeProjectModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form onsubmit="saveProjectForm(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="proj-id" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Nama Proyek *</label>
+            <input type="text" id="proj-name" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nama Klien / Instansi *</label>
+            <input type="text" id="proj-client" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nomor Kontrak / SPK</label>
+            <input type="text" id="proj-contract" class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Tanggal Mulai *</label>
+            <input type="date" id="proj-start" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Deadline Proyek *</label>
+            <input type="date" id="proj-deadline" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">PIC Utama Proyek *</label>
+            <select id="proj-pic" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white"></select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Anggota Tim Terlibat</label>
+            <input type="text" id="proj-team" class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Contoh: Andi, Budi, Citra" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Status Proyek *</label>
+            <select id="proj-status" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Aktif Berjalan">Aktif Berjalan</option>
+              <option value="Menunggu Review Klien">Menunggu Review Klien</option>
+              <option value="Terhambat">Terhambat</option>
+              <option value="Selesai Teknis">Selesai Teknis</option>
+              <option value="Selesai & Lunas">Selesai & Lunas</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Target Progress Saat Ini (%) *</label>
+            <input type="number" id="proj-target" min="0" max="100" value="75" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Kendala Utama Proyek</label>
+            <input type="text" id="proj-obstacle" class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Catatan Team Leader & Tindakan Selanjutnya</label>
+            <textarea id="proj-notes" rows="2" class="w-full p-2.5 border border-slate-300 rounded-lg"></textarea>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-slate-200">
+          <button type="button" onclick="closeProjectModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-semibold">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg font-semibold">Simpan Proyek</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL FORMULIR ANGGOTA TIM
+       ========================================== -->
+  <div id="modal-member" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200">
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 class="text-sm font-bold">Tambah / Edit Anggota Tim</h3>
+        <button onclick="closeMemberModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form onsubmit="saveMemberForm(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="mem-id" />
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Nama Lengkap & Gelar *</label>
+          <input type="text" id="mem-name" required class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Contoh: Ir. Hendra Wijaya, S.T." />
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Jabatan / Peran *</label>
+          <input type="text" id="mem-role" required class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Contoh: Tenaga Ahli Struktur / Estimator" />
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Divisi *</label>
+          <select id="mem-divisi" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+            <option value="Struktur">Struktur</option>
+            <option value="Arsitektur">Arsitektur</option>
+            <option value="MEP">MEP</option>
+            <option value="Estimasi & RAB">Estimasi & RAB</option>
+            <option value="Survey & Pengawasan">Survey & Pengawasan</option>
+            <option value="Administrasi & Kontrak">Administrasi & Kontrak</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Catatan Evaluasi Objektif Team Leader</label>
+          <textarea id="mem-eval" rows="3" class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Evaluasi ketepatan waktu, ketelitian gambar/perhitungan, dan komunikasi..."></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-200">
+          <button type="button" onclick="closeMemberModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-semibold">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg font-semibold">Simpan Anggota</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL FORMULIR KENDALA & KEPUTUSAN
+       ========================================== -->
+  <div id="modal-issue" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200">
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 class="text-sm font-bold">Catat Kendala & Keputusan Team Leader</h3>
+        <button onclick="closeIssueModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form onsubmit="saveIssueForm(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="iss-id" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Proyek *</label>
+            <select id="iss-project" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white"></select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Kategori Kendala *</label>
+            <select id="iss-category" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Menunggu keputusan Team Leader">Menunggu keputusan Team Leader</option>
+              <option value="Kendala teknis">Kendala teknis</option>
+              <option value="Kendala administrasi">Kendala administrasi</option>
+              <option value="Kendala komunikasi">Kendala komunikasi</option>
+              <option value="Kendala sumber daya">Kendala sumber daya</option>
+              <option value="Kendala pembayaran">Kendala pembayaran</option>
+              <option value="Menunggu pihak eksternal">Menunggu pihak eksternal</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Deskripsi Permasalahan *</label>
+            <input type="text" id="iss-problem" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">PIC Pelapor *</label>
+            <select id="iss-pic" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white"></select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Tingkat Urgensi & Dampak *</label>
+            <select id="iss-urgency" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Mendesak (Blokir Progress)">Mendesak (Blokir Progress)</option>
+              <option value="Tinggi (Berpotensi Terlambat)">Tinggi (Berpotensi Terlambat)</option>
+              <option value="Sedang">Sedang</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Dampak Terhadap Pekerjaan *</label>
+            <input type="text" id="iss-impact" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Keputusan yang Dibutuhkan dari Team Leader *</label>
+            <input type="text" id="iss-decision" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Solusi / Tindakan yang Diambil</label>
+            <textarea id="iss-solution" rows="2" class="w-full p-2.5 border border-slate-300 rounded-lg"></textarea>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Target Penyelesaian *</label>
+            <input type="date" id="iss-target" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Status Tindak Lanjut *</label>
+            <select id="iss-status" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Menunggu Keputusan TL">Menunggu Keputusan TL</option>
+              <option value="Sedang Ditindaklanjuti">Sedang Ditindaklanjuti</option>
+              <option value="Menunggu Konfirmasi Instansi">Menunggu Konfirmasi Instansi</option>
+              <option value="Selesai Teratasi">Selesai Teratasi</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-200">
+          <button type="button" onclick="closeIssueModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-semibold">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-semibold">Simpan Data Kendala</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL FORMULIR PENAGIHAN / TERMIN
+       ========================================== -->
+  <div id="modal-billing" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200">
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 class="text-sm font-bold">Tambah / Edit Data Penagihan Proyek</h3>
+        <button onclick="closeBillingModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form onsubmit="saveBillingForm(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="bill-id" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Proyek *</label>
+            <select id="bill-project" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white"></select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Klien / Instansi *</label>
+            <input type="text" id="bill-client" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nilai Kontrak Total (Rp) *</label>
+            <input type="number" id="bill-contract-val" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Termin Pembayaran *</label>
+            <input type="text" id="bill-term" required class="w-full p-2.5 border border-slate-300 rounded-lg" placeholder="Contoh: Termin 1 (Uang Muka 30%) / Sekaligus 100%" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nilai Tagihan Termin Ini (Rp) *</label>
+            <input type="number" id="bill-invoice-val" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nominal yang Sudah Diterima (Rp) *</label>
+            <input type="number" id="bill-paid-val" value="0" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Tanggal Pengajuan Tagihan</label>
+            <input type="date" id="bill-submit-date" class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Status Dokumen Penagihan *</label>
+            <select id="bill-doc-status" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Penyusunan BAST & Berkas">Penyusunan BAST & Berkas</option>
+              <option value="Menunggu Tanda Tangan PPK">Menunggu Tanda Tangan PPK</option>
+              <option value="Lengkap & Sudah Diajukan">Lengkap & Sudah Diajukan</option>
+              <option value="Revisi Berkas Pajak/SPP">Revisi Berkas Pajak/SPP</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Status Pembayaran *</label>
+            <select id="bill-pay-status" class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+              <option value="Belum Diajukan">Belum Diajukan</option>
+              <option value="Menunggu Pencairan (SP2D)">Menunggu Pencairan (SP2D)</option>
+              <option value="Dibayar Sebagian">Dibayar Sebagian</option>
+              <option value="Terlambat Cair (Perlu Follow-Up)">Terlambat Cair (Perlu Follow-Up)</option>
+              <option value="Lunas">Lunas</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">PIC Penagihan *</label>
+            <select id="bill-pic" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white"></select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="font-bold text-slate-700 block mb-1">Tanggal Follow-Up Berikutnya *</label>
+            <input type="date" id="bill-followup-date" required class="w-full p-2.5 border border-slate-300 rounded-lg" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-slate-200">
+          <button type="button" onclick="closeBillingModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-semibold">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold">Simpan Penagihan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       SCRIPT LOGIKA UTAMA APLIKASI
+       ========================================== -->
+  <script>
+    const STORAGE_KEY = 'salsabila_control_center_db_v1';
+
+    // Helper Tanggal Aktual WIB (YYYY-MM-DD)
+    function getTodayWIB() {
+      const now = new Date();
+      const fmt = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Jakarta',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      return fmt.format(now);
+    }
+
+    function addDays(dateStr, days) {
+      const d = new Date(dateStr + 'T00:00:00');
+      d.setDate(d.getDate() + days);
+      return d.toISOString().split('T')[0];
+    }
+
+    function formatRupiah(num) {
+      return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
+    }
+
+    function formatDateID(dateStr) {
+      if (!dateStr) return '<span class="text-rose-500 font-semibold">Tanpa Deadline</span>';
+      const d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    // Standar 7 Item Pemeriksaan Kualitas Konsultan
+    const DEFAULT_QC_ITEMS = [
+      'Dokumen lengkap sesuai KAK',
+      'Perhitungan teknis/struktur sudah diperiksa',
+      'Gambar perencanaan (DED) sudah diperiksa',
+      'RAB & AHSP sudah diperiksa',
+      'Konsistensi antar dokumen (Gambar vs RAB vs Spek)',
+      'Catatan revisi sebelumnya sudah ditindaklanjuti',
+      'Siap diserahkan kepada klien / PPK'
+    ];
+
+    // Generator Data Contoh Realistis CV. Design Salsabila
+    function getInitialSampleData() {
+      const today = getTodayWIB();
+      const yesterday = addDays(today, -2);
+      const tomorrow = addDays(today, 2);
+      const nextWeek = addDays(today, 6);
+      const lastWeek = addDays(today, -7);
+
+      return {
+        members: [
+          { id: 'M1', name: 'Nurul Ilmi, S.Ars', role: 'Team Leader / Principal Architect', divisi: 'Arsitektur', evalNotes: 'Koordinasi lintas divisi dan kendali mutu dokumen perencanaan sangat terjaga.' },
+          { id: 'M2', name: 'Ir. Hendra Wijaya, S.T.', role: 'Tenaga Ahli Struktur', divisi: 'Struktur', evalNotes: 'Pemodelan SAP2000 akurat, perlu percepatan pada penyusunan laporan perhitungan akhir.' },
+          { id: 'M3', name: 'Deden Pratama, A.Md.', role: 'Drafter CAD / BIM Modeler', divisi: 'Arsitektur', evalNotes: 'Detail gambar kerja rapi, responsif terhadap revisi potongan dan tampak.' },
+          { id: 'M4', name: 'Rina Kartika, S.T.', role: 'Quantity Surveyor & Estimator RAB', divisi: 'Estimasi & RAB', evalNotes: 'Teliti dalam penerapan kode AHSP terbaru dan harga satuan Kabupaten Cirebon.' },
+          { id: 'M5', name: 'Agus Salim, S.T.', role: 'Koordinator Pengawas Lapangan', divisi: 'Survey & Pengawasan', evalNotes: 'Laporan mingguan lapangan disiplin, dokumentasi visual lengkap.' },
+          { id: 'M6', name: 'Siti Rahmawati, S.E.', role: 'Staf Administrasi Kontrak & Penagihan', divisi: 'Administrasi & Kontrak', evalNotes: 'Pemberkasan BAST dan dokumen penagihan termin tertata rapi.' }
+        ],
+        projects: [
+          {
+            id: 'P1',
+            name: 'Perencanaan Rehabilitasi Pustu Sarwadadi & Cempaka',
+            client: 'Dinas Kesehatan Kab. Cirebon',
+            contractNo: '602.1/SPK-PRC.PUSTU/DINKES/2026',
+            startDate: lastWeek,
+            deadline: nextWeek,
+            pic: 'Nurul Ilmi, S.Ars',
+            team: 'Hendra Wijaya, Deden Pratama, Rina Kartika',
+            status: 'Aktif Berjalan',
+            targetProgress: 80,
+            obstacle: 'Penyesuaian rincian atap baja ringan Pustu Cempaka terhadap pagu anggaran.',
+            notes: 'Pastikan sinkronisasi volume gambar DED dengan RAB Gabungan dan analisa SMKK.',
+            history: [
+              { date: lastWeek, text: 'Survei pendahuluan & pengukuran eksisting Pustu Sarwadadi dan Cempaka selesai 100%.' },
+              { date: yesterday, text: 'Draf gambar kerja arsitektur & draf awal RAB diajukan ke meja pemeriksaan Team Leader.' }
+            ]
+          },
+          {
+            id: 'P2',
+            name: 'DED Pembangunan Gedung Serbaguna (15x20 m)',
+            client: 'Pemerintah Kecamatan / Desa',
+            contractNo: '024/KTR-GSG/X/2026',
+            startDate: addDays(today, -14),
+            deadline: yesterday,
+            pic: 'Ir. Hendra Wijaya, S.T.',
+            team: 'Hendra Wijaya, Deden Pratama',
+            status: 'Terhambat',
+            targetProgress: 100,
+            obstacle: 'Menunggu konfirmasi perubahan profil kuda-kuda baja WF dari pihak pengguna anggaran.',
+            notes: 'Segera keluarkan surat konfirmasi teknis hari ini agar penetapan dimensi profil tidak menunda finalisasi DED.',
+            history: [
+              { date: addDays(today, -10), text: 'Pemodelan struktur portal baja 15x20m selesai dianalisis di SAP2000.' },
+              { date: yesterday, text: 'Klien meminta simulasi alternatif penutup atap dan fasad ACP + kisi WPC.' }
+            ]
+          },
+          {
+            id: 'P3',
+            name: 'Pengawasan Teknis Rehabilitasi UPTD Puskesmas',
+            client: 'Dinas Kesehatan',
+            contractNo: '602.2/SPK-PWS/2026',
+            startDate: addDays(today, -30),
+            deadline: addDays(today, -3),
+            pic: 'Agus Salim, S.T.',
+            team: 'Agus Salim, Siti Rahmawati',
+            status: 'Selesai Teknis',
+            targetProgress: 100,
+            obstacle: 'Pekerjaan teknis laporan akhir selesai 100%, namun pencairan termin akhir masih menunggu verifikasi BAST.',
+            notes: 'Kawal terus proses penagihan termin 100% di bagian keuangan dinas.',
+            history: [
+              { date: addDays(today, -5), text: 'Laporan Akhir Pengawasan dan dokumentasi 100% telah disetujui PPK.' }
+            ]
+          }
+        ],
+        tasks: [
+          {
+            id: 'T1',
+            name: 'Finalisasi RAB Gabungan, AHSP 2025/2026 & Analisa SMKK Pustu',
+            projectId: 'P1',
+            stage: 'B. PERENCANAAN',
+            subStage: 'RAB dan analisis harga satuan',
+            divisi: 'Estimasi & RAB',
+            pic: 'Rina Kartika, S.T.',
+            support: 'Deden Pratama, A.Md.',
+            startDate: lastWeek,
+            deadline: today,
+            priority: 'Kritis',
+            status: 'Menunggu Pemeriksaan',
+            weight: 35,
+            manualProgressMode: false,
+            progress: 80,
+            subtasks: [
+              { id: 's1', title: 'Input volume pekerjaan bongkaran & pasangan Pustu Sarwadadi', done: true },
+              { id: 's2', title: 'Input volume pekerjaan atap, plafon, dan keramik Pustu Cempaka', done: true },
+              { id: 's3', title: 'Verifikasi Harga Satuan Pokok Kabupaten Cirebon 2026', done: true },
+              { id: 's4', title: 'Rekapitulasi biaya SMKK dan pembulatan sesuai pagu KAK', done: true },
+              { id: 's5', title: 'Persetujuan akhir & tanda tangan Team Leader', done: false }
+            ],
+            obstacle: 'Perlu pengecekan silang satuan kusen aluminium dengan spesifikasi RKS.',
+            notes: 'Periksa kembali pembulatan PPN 11% dan konsistensi kode AHSP.',
+            nextAction: 'Pemeriksaan meja Team Leader sore ini pukul 14.00 WIB.',
+            needDecision: false,
+            clientFollowUp: true,
+            lastUpdated: today,
+            progressChangedRecently: true,
+            qcChecklist: [true, true, true, true, false, true, false],
+            qcReviewer: 'Nurul Ilmi, S.Ars',
+            qcDate: today,
+            qcNotes: 'Menunggu pengecekan konsistensi item pekerjaan listrik antara gambar titik lampu dan BoQ.'
+          },
+          {
+            id: 'T2',
+            name: 'Analisis Struktur Portal Baja WF & Pondasi Telapak Gedung 15x20m',
+            projectId: 'P2',
+            stage: 'B. PERENCANAAN',
+            subStage: 'Perhitungan struktur',
+            divisi: 'Struktur',
+            pic: 'Ir. Hendra Wijaya, S.T.',
+            support: 'Deden Pratama, A.Md.',
+            startDate: addDays(today, -10),
+            deadline: yesterday,
+            priority: 'Kritis',
+            status: 'Terhambat',
+            weight: 45,
+            manualProgressMode: false,
+            progress: 75,
+            subtasks: [
+              { id: 's21', title: 'Pemodelan 3D Portal Baja bentang 15m di SAP2000', done: true },
+              { id: 's22', title: 'Kombinasi pembebanan gempa dan angin', done: true },
+              { id: 's23', title: 'Desain sambungan baut mutu tinggi & baseplate', done: true },
+              { id: 's24', title: 'Cetak lampiran nota perhitungan struktur final', done: false }
+            ],
+            obstacle: 'Perubahan spek penutup atap dari pihak pemilik proyek belum diputuskan secara tertulis.',
+            notes: 'Jangan ubah dimensi kolom utama WF 250 sebelum ada keputusan resmi.',
+            nextAction: 'Team Leader memutuskan opsi profil gording dan mengirim berita acara teknis ke klien.',
+            needDecision: true,
+            clientFollowUp: true,
+            lastUpdated: lastWeek,
+            progressChangedRecently: false,
+            qcChecklist: [true, true, false, false, false, false, false],
+            qcReviewer: 'Nurul Ilmi, S.Ars',
+            qcDate: yesterday,
+            qcNotes: 'Tertahan konfirmasi beban penutup atap.'
+          },
+          {
+            id: 'T3',
+            name: 'Gambar Kerja Detail Fasad ACP, Kisi WPC & Ornamen Mega Mendung',
+            projectId: 'P2',
+            stage: 'B. PERENCANAAN',
+            subStage: 'Gambar perencanaan',
+            divisi: 'Arsitektur',
+            pic: 'Deden Pratama, A.Md.',
+            support: 'Nurul Ilmi, S.Ars',
+            startDate: yesterday,
+            deadline: today,
+            priority: 'Tinggi',
+            status: 'Menunggu Pemeriksaan',
+            weight: 35,
+            manualProgressMode: false,
+            progress: 67,
+            subtasks: [
+              { id: 's31', title: 'Gambar tampak depan dan samping skala 1:100', done: true },
+              { id: 's32', title: 'Detail rangka hollow dudukan modul ACP & kisi WPC', done: true },
+              { id: 's33', title: 'Detail pola cutting laser motif Mega Mendung', done: false }
+            ],
+            obstacle: 'Perlu kepastian ketebalan plat cutting ornamen untuk dihitung di RAB.',
+            notes: 'Gunakan standar ACP PVDF 4mm eksterior.',
+            nextAction: 'Review gambar detail potongan fasad bersama Team Leader.',
+            needDecision: true,
+            clientFollowUp: false,
+            lastUpdated: today,
+            progressChangedRecently: true,
+            qcChecklist: [true, false, true, false, false, true, false],
+            qcReviewer: 'Nurul Ilmi, S.Ars',
+            qcDate: today,
+            qcNotes: 'Detail sambungan sealant ACP perlu diperjelas skalanya.'
+          },
+          {
+            id: 'T4',
+            name: 'Penyusunan RKS / Spesifikasi Teknis Rehabilitasi Pustu',
+            projectId: 'P1',
+            stage: 'B. PERENCANAAN',
+            subStage: 'Pemeriksaan internal',
+            divisi: 'Arsitektur',
+            pic: 'Nurul Ilmi, S.Ars',
+            support: 'Rina Kartika, S.T.',
+            startDate: yesterday,
+            deadline: tomorrow,
+            priority: 'Tinggi',
+            status: 'Sedang Dikerjakan',
+            weight: 35,
+            manualProgressMode: false,
+            progress: 50,
+            subtasks: [
+              { id: 's41', title: 'Pasal spesifikasi material arsitektur & struktur', done: true },
+              { id: 's42', title: 'Sinkronisasi daftar merk material dengan RAB', done: false }
+            ],
+            obstacle: '',
+            notes: 'Pastikan seluruh item pekerjaan pada BoQ memiliki pasal spesifikasi di RKS.',
+            nextAction: 'Finalisasi pasal pekerjaan elektrikal dan sanitair.',
+            needDecision: false,
+            clientFollowUp: false,
+            lastUpdated: today,
+            progressChangedRecently: true,
+            qcChecklist: [false, false, false, false, false, false, false],
+            qcReviewer: '',
+            qcDate: '',
+            qcNotes: ''
+          },
+          {
+            id: 'T5',
+            name: 'Verifikasi Kelengkapan Dokumen Kualifikasi & BAST Kontrak Pustu',
+            projectId: 'P1',
+            stage: 'A. KONTRAK',
+            subStage: 'Kontrak dan dokumen pendukung',
+            divisi: 'Administrasi & Kontrak',
+            pic: 'Siti Rahmawati, S.E.',
+            support: '',
+            startDate: lastWeek,
+            deadline: lastWeek,
+            priority: 'Sedang',
+            status: 'Selesai',
+            weight: 30,
+            manualProgressMode: true,
+            progress: 100,
+            subtasks: [
+              { id: 's51', title: 'Pengarsipan SPK & KAK Perencanaan', done: true },
+              { id: 's52', title: 'Berita Acara Serah Terima Lapangan Awal', done: true }
+            ],
+            obstacle: '',
+            notes: 'Arsip digital sudah diunggah ke folder proyek.',
+            nextAction: 'Selesai.',
+            needDecision: false,
+            clientFollowUp: false,
+            lastUpdated: lastWeek,
+            progressChangedRecently: true,
+            qcChecklist: [true, true, true, true, true, true, true],
+            qcReviewer: 'Nurul Ilmi, S.Ars',
+            qcDate: lastWeek,
+            qcNotes: 'Dokumen kontrak lengkap dan terverifikasi.'
+          },
+          {
+            id: 'T6',
+            name: 'Pengajuan Berkas Penagihan Termin 100% Pengawasan Puskesmas',
+            projectId: 'P3',
+            stage: 'D. PENAGIHAN',
+            subStage: 'Tindak lanjut pembayaran yang belum diterima',
+            divisi: 'Administrasi & Kontrak',
+            pic: 'Siti Rahmawati, S.E.',
+            support: 'Agus Salim, S.T.',
+            startDate: addDays(today, -5),
+            deadline: today,
+            priority: 'Kritis',
+            status: 'Sedang Dikerjakan',
+            weight: 100,
+            manualProgressMode: false,
+            progress: 75,
+            subtasks: [
+              { id: 's61', title: 'BAST Pekerjaan Pengawasan 100%', done: true },
+              { id: 's62', title: 'Faktur Pajak & e-Billing', done: true },
+              { id: 's63', title: 'Kwitansi & Surat Permohonan Pembayaran ke Bendahara', done: true },
+              { id: 's64', title: 'Konfirmasi penerbitan SP2D pencairan ke Bank BJB', done: false }
+            ],
+            obstacle: 'Menunggu verifikasi berkas SPP oleh staf perbendaharaan dinas.',
+            notes: 'Proyek sudah selesai teknis 100%, prioritaskan follow-up pencairan hari ini.',
+            nextAction: 'Kunjungan follow-up ke bagian keuangan Dinas Kesehatan.',
+            needDecision: false,
+            clientFollowUp: true,
+            lastUpdated: today,
+            progressChangedRecently: true,
+            qcChecklist: [true, true, true, true, true, true, false],
+            qcReviewer: 'Nurul Ilmi, S.Ars',
+            qcDate: today,
+            qcNotes: 'Berkas tagihan lengkap.'
+          },
+          {
+            id: 'T7',
+            name: 'Penyusunan Kurva-S Rencana & WBS Pelaksanaan Gedung Serbaguna',
+            projectId: 'P2',
+            stage: 'C. PELAKSANAAN / PENGAWASAN',
+            subStage: 'Persiapan lapangan',
+            divisi: 'Survey & Pengawasan',
+            pic: '',
+            support: '',
+            startDate: today,
+            deadline: '',
+            priority: 'Sedang',
+            status: 'Belum Dimulai',
+            weight: 20,
+            manualProgressMode: true,
+            progress: 0,
+            subtasks: [
+              { id: 's71', title: 'Breakdown bobot per item pekerjaan struktur & arsitektur', done: false },
+              { id: 's72', title: 'Plotting jadwal durasi 120 hari kalender', done: false }
+            ],
+            obstacle: 'Belum ditetapkan PIC dan tanggal batas waktu.',
+            notes: 'Segera tetapkan PIC begitu RAB gedung serbaguna dikunci.',
+            nextAction: 'Tetapkan PIC dan deadline.',
+            needDecision: true,
+            clientFollowUp: false,
+            lastUpdated: lastWeek,
+            progressChangedRecently: false,
+            qcChecklist: [false, false, false, false, false, false, false],
+            qcReviewer: '',
+            qcDate: '',
+            qcNotes: ''
+          }
+        ],
+        issues: [
+          {
+            id: 'I1',
+            projectId: 'P2',
+            category: 'Menunggu keputusan Team Leader',
+            problem: 'Perubahan jarak gording dan jenis penutup atap Gedung Serbaguna 15x20m',
+            pic: 'Ir. Hendra Wijaya, S.T.',
+            urgency: 'Mendesak (Blokir Progress)',
+            impact: 'Finalisasi nota perhitungan struktur SAP2000 dan gambar detail sambungan baja tertunda 2 hari.',
+            reportedDate: yesterday,
+            decisionNeeded: 'Keputusan penguncian spesifikasi atap (UPVC Alderon vs Spandek Pasir) beserta jarak gording C-150.',
+            solution: 'Tetapkan penggunaan atap UPVC berongga dengan jarak gording maksimal 1,2 m sesuai standar keamanan defleksi.',
+            targetDate: today,
+            status: 'Menunggu Keputusan TL'
+          },
+          {
+            id: 'I2',
+            projectId: 'P1',
+            category: 'Kendala teknis',
+            problem: 'Selisih pagu anggaran terhadap volume penggantian rangka atap Pustu Cempaka',
+            pic: 'Rina Kartika, S.T.',
+            urgency: 'Tinggi (Berpotensi Terlambat)',
+            impact: 'Total rekapitulasi RAB melebihi pagu KAK sebesar 4,2%.',
+            reportedDate: yesterday,
+            decisionNeeded: 'Persetujuan optimasi item pekerjaan non-struktural (penyesuaian luasan rabat beton halaman).',
+            solution: 'Optimasi volume pekerjaan halaman luar agar fokus anggaran 100% mengamankan struktur atap dan ruang pelayanan.',
+            targetDate: today,
+            status: 'Sedang Ditindaklanjuti'
+          },
+          {
+            id: 'I3',
+            projectId: 'P3',
+            category: 'Kendala pembayaran',
+            problem: 'Pencairan Termin 100% Pengawasan Puskesmas belum terbit SP2D',
+            pic: 'Siti Rahmawati, S.E.',
+            urgency: 'Tinggi (Berpotensi Terlambat)',
+            impact: 'Arus kas masuk proyek selesai teknis tertahan lebih dari 7 hari sejak BAST.',
+            reportedDate: addDays(today, -3),
+            decisionNeeded: 'Arahan konfirmasi langsung kepada PPK dan bagian keuangan instansi.',
+            solution: 'Siti melakukan pendampingan verifikasi berkas fisik di bagian keuangan hari ini.',
+            targetDate: tomorrow,
+            status: 'Menunggu Konfirmasi Instansi'
+          }
+        ],
+        billings: [
+          {
+            id: 'B1',
+            projectId: 'P3',
+            client: 'Dinas Kesehatan',
+            contractVal: 48500000,
+            term: 'Termin 100% (Sekaligus)',
+            invoiceVal: 48500000,
+            paidVal: 0,
+            submitDate: addDays(today, -6),
+            docStatus: 'Lengkap & Sudah Diajukan',
+            payStatus: 'Terlambat Cair (Perlu Follow-Up)',
+            pic: 'Siti Rahmawati, S.E.',
+            followUpDate: today
+          },
+          {
+            id: 'B2',
+            projectId: 'P1',
+            client: 'Dinas Kesehatan Kab. Cirebon',
+            contractVal: 65000000,
+            term: 'Termin 100% (Setelah Penyerahan DED & RAB)',
+            invoiceVal: 65000000,
+            paidVal: 0,
+            submitDate: '',
+            docStatus: 'Penyusunan BAST & Berkas',
+            payStatus: 'Belum Diajukan',
+            pic: 'Siti Rahmawati, S.E.',
+            followUpDate: nextWeek
+          },
+          {
+            id: 'B3',
+            projectId: 'P2',
+            client: 'Pemerintah Kecamatan / Desa',
+            contractVal: 42000000,
+            term: 'Termin 1 (Uang Muka 30%) & Pelunasan 70%',
+            invoiceVal: 42000000,
+            paidVal: 12600000,
+            submitDate: addDays(today, -12),
+            docStatus: 'Menunggu Tanda Tangan PPK',
+            payStatus: 'Dibayar Sebagian',
+            pic: 'Siti Rahmawati, S.E.',
+            followUpDate: tomorrow
+          }
+        ],
+        dailyAgenda: {
+          [today]: {
+            top3: ['T1', 'T2', 'T6'],
+            customChecklist: [
+              { id: 'dc1', text: 'Briefing pagi 15 menit bersama tim struktur, arsitektur, dan estimator RAB', done: true },
+              { id: 'dc2', text: 'Periksa konsistensi gambar detail fasad dengan analisa harga satuan', done: false },
+              { id: 'dc3', text: 'Hubungi PPK Dinas Kesehatan terkait jadwal asistensi akhir Pustu Sarwadadi & Cempaka', done: false }
+            ],
+            eval: {
+              q1: 'Verifikasi awal volume RAB Pustu Sarwadadi selesai.',
+              q2: 'Finalisasi nota perhitungan struktur Gedung Serbaguna masih menunggu kepastian penutup atap.',
+              q3: 'Perubahan spesifikasi dari pihak eksternal dan penyesuaian pagu anggaran.',
+              q4: 'PPK Dinas Kesehatan & Klien Gedung Serbaguna.',
+              q5: 'Selesaikan pemeriksaan akhir RAB Pustu dan kunci spesifikasi atap Gedung Serbaguna.'
+            }
+          }
+        }
+      };
+    }
+
+    // State Aplikasi
+    let db = null;
+    let currentTab = 'dashboard';
+
+    function loadDatabase() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          db = JSON.parse(saved);
+        } catch (e) {
+          db = getInitialSampleData();
+        }
+      } else {
+        db = getInitialSampleData();
+        saveDatabase();
+      }
+    }
+
+    function saveDatabase() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      updateSidebarBadges();
+    }
+
+    // Perhitungan Progress Pekerjaan & Proyek Berbobot (Weighted Progress)
+    function computeTaskProgress(task) {
+      if (!task) return 0;
+      if (task.status === 'Selesai') return 100;
+      if (!task.manualProgressMode && Array.isArray(task.subtasks) && task.subtasks.length > 0) {
+        const doneCount = task.subtasks.filter(s => s.done).length;
+        return Math.round((doneCount / task.subtasks.length) * 100);
+      }
+      return Number(task.progress || 0);
+    }
+
+    function computeProjectWeightedProgress(projectId) {
+      const projTasks = db.tasks.filter(t => t.projectId === projectId);
+      if (projTasks.length === 0) return 0;
+      let totalWeight = 0;
+      let weightedSum = 0;
+      projTasks.forEach(t => {
+        const w = Number(t.weight || 10);
+        const p = computeTaskProgress(t);
+        totalWeight += w;
+        weightedSum += (w * p);
+      });
+      return totalWeight > 0 ? Math.round(weightedSum / totalWeight) : 0;
+    }
+
+    function getProjectName(projectId) {
+      const p = db.projects.find(x => x.id === projectId);
+      return p ? p.name : 'Proyek Umum';
+    }
+
+    function isTaskOverdue(task, refDate = getTodayWIB()) {
+      if (!task || !task.deadline) return false;
+      if (task.status === 'Selesai') return false;
+      return task.deadline < refDate;
+    }
+
+    function isTaskDueSoon(task, refDate = getTodayWIB()) {
+      if (!task || !task.deadline || task.status === 'Selesai') return false;
+      const in3Days = addDays(refDate, 3);
+      return task.deadline > refDate && task.deadline <= in3Days;
+    }
+
+    // Styling Badge Status & Prioritas
+    function getStatusBadge(status) {
+      const styles = {
+        'Belum Dimulai': 'bg-slate-100 text-slate-700 border-slate-300',
+        'Sedang Dikerjakan': 'bg-sky-100 text-sky-800 border-sky-300',
+        'Menunggu Pemeriksaan': 'bg-purple-100 text-purple-800 border-purple-300',
+        'Revisi': 'bg-amber-100 text-amber-800 border-amber-300',
+        'Terhambat': 'bg-rose-100 text-rose-800 border-rose-300',
+        'Selesai': 'bg-emerald-100 text-emerald-800 border-emerald-300'
+      };
+      const cls = styles[status] || 'bg-slate-100 text-slate-700';
+      return `<span class="px-2 py-0.5 text-[11px] font-semibold rounded-full border ${cls} whitespace-nowrap">${status}</span>`;
+    }
+
+    function getPriorityBadge(priority) {
+      const styles = {
+        'Kritis': 'bg-rose-600 text-white',
+        'Tinggi': 'bg-amber-500 text-slate-950',
+        'Sedang': 'bg-sky-500 text-white',
+        'Rendah': 'bg-slate-200 text-slate-700'
+      };
+      const cls = styles[priority] || 'bg-slate-200 text-slate-700';
+      return `<span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded ${cls}">${priority}</span>`;
+    }
+
+    // ==========================================
+    // NAVIGASI & HEADER JAM AKTUAL WIB
+    // ==========================================
+    const TAB_META = {
+      dashboard: { title: 'Dashboard Utama', sub: 'Team Leader Dashboard — Ringkasan Eksekutif & Sistem Peringatan Dini' },
+      today: { title: 'Agenda Hari Ini', sub: 'Prioritas Harian, Checklist Tindak Lanjut, dan Evaluasi Akhir Hari' },
+      todos: { title: 'To-Do List & Sub-Checklist Pekerjaan', sub: 'Manajemen Tugas Detail dengan Perhitungan Progress Otomatis maupun Manual' },
+      matrix: { title: 'Matriks Pekerjaan Konsultan', sub: 'Kendali Menyeluruh Berdasarkan Proyek & 4 Tahapan Bisnis (Kontrak, Perencanaan, Pengawasan, Penagihan)' },
+      projects: { title: 'Monitoring Progress Proyek', sub: 'Perhitungan Progress Berbobot (Weighted Progress), Rincian Tahapan, dan Riwayat Perkembangan' },
+      team: { title: 'Kontrol Tim & Pembagian Tugas PIC', sub: 'Distribusi Beban Kerja Objektif, Ketepatan Deadline, dan Evaluasi Anggota' },
+      review: { title: 'Pemeriksaan & Revisi (Quality Control Gate)', sub: 'Verifikasi Checklist Dokumen, Gambar, Perhitungan, dan RAB Sebelum Disetujui Selesai' },
+      issues: { title: 'Kendala & Keputusan Team Leader', sub: 'Daftar Masalah Teknis, Administrasi, Eksternal, dan Keputusan Mendesak' },
+      billing: { title: 'Penagihan & Arus Pekerjaan', sub: 'Pemisahan Status Teknis vs Status Pembayaran Termin & Monitoring Piutang Proyek' },
+      reports: { title: 'Laporan Team Leader & Pencadangan Data', sub: 'Laporan Harian/Mingguan/Bulanan, Ekspor CSV/Excel, Cetak PDF, dan Backup/Restore JSON' }
+    };
+
+    function switchTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById(`view-${tabId}`);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('#sidebar-nav .nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+      });
+
+      const meta = TAB_META[tabId] || TAB_META.dashboard;
+      document.getElementById('page-title').textContent = meta.title;
+      document.getElementById('page-subtitle').textContent = meta.sub;
+
+      renderCurrentTab();
+    }
+
+    function renderCurrentTab() {
+      populateAllDropdowns();
+      updateSidebarBadges();
+      if (currentTab === 'dashboard') renderDashboardView();
+      else if (currentTab === 'today') renderTodayView();
+      else if (currentTab === 'todos') renderTodosView();
+      else if (currentTab === 'matrix') renderMatrixView();
+      else if (currentTab === 'projects') renderProjectsView();
+      else if (currentTab === 'team') renderTeamView();
+      else if (currentTab === 'review') renderReviewView();
+      else if (currentTab === 'issues') renderIssuesView();
+      else if (currentTab === 'billing') renderBillingView();
+      else if (currentTab === 'reports') renderReportsView();
+    }
+
+    function updateClockWIB() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+      const timeStr = now.toLocaleTimeString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      document.getElementById('live-date').textContent = dateStr;
+      document.getElementById('live-time').textContent = timeStr + ' WIB';
+    }
+
+    function updateSidebarBadges() {
+      const today = getTodayWIB();
+      const overdueCount = db.tasks.filter(t => isTaskOverdue(t, today)).length;
+      const reviewCount = db.tasks.filter(t => t.status === 'Menunggu Pemeriksaan' || t.status === 'Revisi').length;
+      const openIssuesCount = db.issues.filter(i => i.status !== 'Selesai Teratasi').length;
+      const todayDueCount = db.tasks.filter(t => t.status !== 'Selesai' && (t.deadline === today || isTaskOverdue(t, today))).length;
+
+      const alertBadge = document.getElementById('nav-badge-alerts');
+      const totalAlerts = overdueCount + openIssuesCount;
+      if (totalAlerts > 0) {
+        alertBadge.textContent = totalAlerts;
+        alertBadge.classList.remove('hidden');
+      } else {
+        alertBadge.classList.add('hidden');
+      }
+
+      document.getElementById('nav-badge-today').textContent = todayDueCount;
+      document.getElementById('nav-badge-todos').textContent = db.tasks.filter(t => t.status !== 'Selesai').length;
+      document.getElementById('nav-badge-review').textContent = reviewCount;
+      document.getElementById('nav-badge-issues').textContent = openIssuesCount;
+    }
+
+    function handleGlobalSearch(query) {
+      if (!query.trim()) return;
+      if (currentTab !== 'todos') {
+        switchTab('todos');
+      }
+      document.getElementById('todo-search').value = query;
+      renderTodosView();
+    }
+
+    function populateAllDropdowns() {
+      const projOptionsAll = `<option value="ALL">Semua Proyek</option>` + db.projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+      const projOptionsReq = db.projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+      const picOptionsAll = `<option value="ALL">Semua PIC</option>` + db.members.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+      const picOptionsReq = `<option value="">-- Tanpa PIC (Peringatan) --</option>` + db.members.map(m => `<option value="${m.name}">${m.name} (${m.divisi})</option>`).join('');
+
+      ['todo-filter-project', 'matrix-filter-project', 'report-project'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { const val = el.value; el.innerHTML = projOptionsAll; if (val) el.value = val; }
+      });
+
+      ['todo-filter-pic', 'matrix-filter-pic', 'report-pic'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { const val = el.value; el.innerHTML = picOptionsAll; if (val) el.value = val; }
+      });
+
+      ['task-project', 'iss-project', 'bill-project'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { const val = el.value; el.innerHTML = projOptionsReq; if (val) el.value = val; }
+      });
+
+      ['task-pic', 'proj-pic', 'iss-pic', 'bill-pic'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { const val = el.value; el.innerHTML = picOptionsReq; if (val) el.value = val; }
+      });
+    }
+
+    // ==========================================
+    // 1. RENDER DASHBOARD UTAMA
+    // ==========================================
+    function renderDashboardView() {
+      const today = getTodayWIB();
+      const activeProjects = db.projects.filter(p => p.status !== 'Selesai & Lunas').length;
+      const totalTasks = db.tasks.length;
+      const doneTasks = db.tasks.filter(t => t.status === 'Selesai').length;
+      const inProgressTasks = db.tasks.filter(t => t.status === 'Sedang Dikerjakan').length;
+      const notStartedTasks = db.tasks.filter(t => t.status === 'Belum Dimulai').length;
+      const overdueTasks = db.tasks.filter(t => isTaskOverdue(t, today)).length;
+      const waitingReviewTasks = db.tasks.filter(t => t.status === 'Menunggu Pemeriksaan').length;
+      const needDecisionCount = db.tasks.filter(t => t.needDecision && t.status !== 'Selesai').length + db.issues.filter(i => i.status === 'Menunggu Keputusan TL').length;
+
+      const cards = [
+        { label: 'Proyek Aktif', val: activeProjects, icon: 'fa-building', color: 'text-sky-600 bg-sky-50 border-sky-200', tab: 'projects' },
+        { label: 'Total Pekerjaan', val: totalTasks, icon: 'fa-layer-group', color: 'text-slate-700 bg-slate-50 border-slate-200', tab: 'todos' },
+        { label: 'Pekerjaan Selesai', val: doneTasks, icon: 'fa-circle-check', color: 'text-emerald-600 bg-emerald-50 border-emerald-200', tab: 'todos' },
+        { label: 'Sedang Berjalan', val: inProgressTasks, icon: 'fa-spinner', color: 'text-blue-600 bg-blue-50 border-blue-200', tab: 'todos' },
+        { label: 'Belum Dimulai', val: notStartedTasks, icon: 'fa-clock', color: 'text-slate-500 bg-slate-50 border-slate-200', tab: 'todos' },
+        { label: 'Terlambat (Overdue)', val: overdueTasks, icon: 'fa-fire', color: 'text-rose-600 bg-rose-50 border-rose-300', tab: 'today' },
+        { label: 'Menunggu Pemeriksaan', val: waitingReviewTasks, icon: 'fa-magnifying-glass-chart', color: 'text-purple-600 bg-purple-50 border-purple-200', tab: 'review' },
+        { label: 'Butuh Keputusan TL', val: needDecisionCount, icon: 'fa-gavel', color: 'text-amber-600 bg-amber-50 border-amber-300', tab: 'issues' }
+      ];
+
+      document.getElementById('dashboard-stat-cards').innerHTML = cards.map(c => `
+        <div onclick="switchTab('${c.tab}')" class="p-3.5 rounded-xl border ${c.color} cursor-pointer hover:shadow-md transition flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold opacity-80 leading-tight">${c.label}</span>
+            <i class="fa-solid ${c.icon} text-sm opacity-80"></i>
+          </div>
+          <div class="text-2xl font-extrabold mt-2">${c.val}</div>
+        </div>
+      `).join('');
+
+      // Sistem Peringatan Visual Otomatis
+      const dueTodayCount = db.tasks.filter(t => t.status !== 'Selesai' && t.deadline === today).length;
+      const due3DaysCount = db.tasks.filter(t => isTaskDueSoon(t, today)).length;
+      const stagnantCount = db.tasks.filter(t => t.status !== 'Selesai' && !t.progressChangedRecently).length;
+      const blockedCount = db.tasks.filter(t => t.status === 'Terhambat').length;
+      const unpaidBillsCount = db.billings.filter(b => b.payStatus !== 'Lunas').length;
+      const noPicCount = db.tasks.filter(t => !t.pic || t.pic.trim() === '').length;
+      const noDeadlineCount = db.tasks.filter(t => !t.deadline || t.deadline.trim() === '').length;
+
+      const warnings = [
+        { label: `Deadline Lewat: ${overdueTasks}`, active: overdueTasks > 0, cls: 'bg-rose-600 text-white', tab: 'today' },
+        { label: `Deadline Hari Ini: ${dueTodayCount}`, active: dueTodayCount > 0, cls: 'bg-amber-500 text-slate-950', tab: 'today' },
+        { label: `Deadline <= 3 Hari: ${due3DaysCount}`, active: due3DaysCount > 0, cls: 'bg-amber-100 text-amber-800 border border-amber-300', tab: 'todos' },
+        { label: `Progress Stagnan: ${stagnantCount}`, active: stagnantCount > 0, cls: 'bg-orange-100 text-orange-800 border border-orange-300', tab: 'todos' },
+        { label: `Pekerjaan Terhambat: ${blockedCount}`, active: blockedCount > 0, cls: 'bg-rose-100 text-rose-800 border border-rose-300', tab: 'issues' },
+        { label: `Menunggu Pemeriksaan TL: ${waitingReviewTasks}`, active: waitingReviewTasks > 0, cls: 'bg-purple-100 text-purple-800 border border-purple-300', tab: 'review' },
+        { label: `Tagihan Belum Lunas: ${unpaidBillsCount}`, active: unpaidBillsCount > 0, cls: 'bg-emerald-100 text-emerald-800 border border-emerald-300', tab: 'billing' },
+        { label: `Pekerjaan Tanpa PIC: ${noPicCount}`, active: noPicCount > 0, cls: 'bg-red-100 text-red-900 border border-red-400', tab: 'todos' },
+        { label: `Pekerjaan Tanpa Deadline: ${noDeadlineCount}`, active: noDeadlineCount > 0, cls: 'bg-red-100 text-red-900 border border-red-400', tab: 'todos' }
+      ];
+
+      document.getElementById('dashboard-warnings-bar').innerHTML = warnings.map(w => `
+        <button onclick="switchTab('${w.tab}')" class="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${w.active ? w.cls : 'bg-slate-100 text-slate-400'}">
+          <i class="fa-solid ${w.active ? 'fa-circle-exclamation' : 'fa-check'}"></i> ${w.label}
+        </button>
+      `).join('');
+
+      // Bagian Khusus: PERHATIAN TEAM LEADER
+      const overdueAndTodayList = db.tasks.filter(t => t.status !== 'Selesai' && (isTaskOverdue(t, today) || t.deadline === today));
+      const blockedAndDecisionList = db.tasks.filter(t => t.status !== 'Selesai' && (t.status === 'Terhambat' || t.needDecision || t.status === 'Menunggu Pemeriksaan'));
+
+      document.getElementById('tl-attention-grid').innerHTML = `
+        <div class="border border-rose-200 bg-rose-50/40 rounded-xl p-4">
+          <h4 class="text-xs font-bold text-rose-800 uppercase mb-3 flex items-center justify-between">
+            <span><i class="fa-solid fa-hourglass-end mr-1"></i> Terlambat & Deadline Hari Ini (${overdueAndTodayList.length})</span>
+            <button onclick="switchTab('today')" class="text-[11px] underline">Buka Agenda</button>
+          </h4>
+          <div class="space-y-2 max-h-60 overflow-y-auto">
+            ${overdueAndTodayList.length === 0 ? `<p class="text-xs text-slate-500 italic">Tidak ada pekerjaan terlambat atau deadline hari ini.</p>` : overdueAndTodayList.map(t => `
+              <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-1.5 py-0.5 text-[10px] font-bold rounded ${isTaskOverdue(t, today) ? 'bg-rose-600 text-white' : 'bg-amber-500 text-slate-950'}">
+                      ${isTaskOverdue(t, today) ? 'TERLAMBAT' : 'DEADLINE HARI INI'}
+                    </span>
+                    <span class="text-xs font-bold text-slate-800">${t.name}</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1">${getProjectName(t.projectId)} &bull; PIC: <strong>${t.pic || 'BELUM ADA PIC'}</strong> &bull; Batas: ${formatDateID(t.deadline)}</p>
+                </div>
+                <button onclick="openTaskModal('${t.id}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded text-[11px] font-semibold">Tindak</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="border border-amber-200 bg-amber-50/40 rounded-xl p-4">
+          <h4 class="text-xs font-bold text-amber-900 uppercase mb-3 flex items-center justify-between">
+            <span><i class="fa-solid fa-gavel mr-1"></i> Terhambat, Menunggu Pemeriksaan & Keputusan TL (${blockedAndDecisionList.length})</span>
+            <button onclick="switchTab('review')" class="text-[11px] underline">Meja QC</button>
+          </h4>
+          <div class="space-y-2 max-h-60 overflow-y-auto">
+            ${blockedAndDecisionList.length === 0 ? `<p class="text-xs text-slate-500 italic">Seluruh pekerjaan lancar.</p>` : blockedAndDecisionList.map(t => `
+              <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    ${getStatusBadge(t.status)}
+                    ${t.needDecision ? `<span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-rose-100 text-rose-700">BUTUH KEPUTUSAN TL</span>` : ''}
+                    <span class="text-xs font-bold text-slate-800">${t.name}</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600 mt-1">PIC: <strong>${t.pic || 'Tanpa PIC'}</strong> ${t.obstacle ? `| Kendala: <span class="text-rose-600">${t.obstacle}</span>` : ''}</p>
+                </div>
+                <button onclick="switchTab('${t.status === 'Menunggu Pemeriksaan' ? 'review' : 'todos'}')" class="px-2 py-1 bg-slate-800 text-white rounded text-[11px] font-semibold shrink-0">Periksa</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      // Grafik Progress Proyek Berbobot
+      document.getElementById('dashboard-project-chart').innerHTML = db.projects.map(p => {
+        const actual = computeProjectWeightedProgress(p.id);
+        const isLate = p.deadline < today && actual < 100;
+        return `
+          <div class="p-3 rounded-lg border border-slate-100 bg-slate-50/60 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <div>
+                <span class="font-bold text-slate-800">${p.name}</span>
+                ${isLate ? `<span class="ml-2 px-1.5 py-0.5 bg-rose-600 text-white text-[10px] rounded font-bold">TERLAMBAT</span>` : ''}
+                <p class="text-[11px] text-slate-500">${p.client} &bull; PIC Utama: ${p.pic}</p>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-extrabold text-sky-700">${actual}%</span>
+                <span class="text-[11px] text-slate-400 block">Target: ${p.targetProgress}%</span>
+              </div>
+            </div>
+            <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full ${actual >= p.targetProgress ? 'bg-emerald-500' : 'bg-sky-500'} rounded-full transition-all" style="width:${actual}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Grafik Ringkasan Pekerjaan per PIC
+      document.getElementById('dashboard-pic-chart').innerHTML = db.members.map(m => {
+        const myTasks = db.tasks.filter(t => t.pic === m.name);
+        const active = myTasks.filter(t => t.status !== 'Selesai').length;
+        const done = myTasks.filter(t => t.status === 'Selesai').length;
+        const late = myTasks.filter(t => isTaskOverdue(t, today)).length;
+        const avgProg = myTasks.length ? Math.round(myTasks.reduce((a, b) => a + computeTaskProgress(b), 0) / myTasks.length) : 0;
+        return `
+          <div class="p-3 rounded-lg border border-slate-100 bg-slate-50/60 flex items-center justify-between gap-4">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-800 truncate">${m.name}</span>
+                <span class="text-xs font-bold text-slate-700">${avgProg}% Rata-rata</span>
+              </div>
+              <div class="flex items-center gap-3 text-[11px] text-slate-500 mt-1">
+                <span>Aktif: <strong class="text-sky-700">${active}</strong></span>
+                <span>Selesai: <strong class="text-emerald-700">${done}</strong></span>
+                <span>Terlambat: <strong class="${late > 0 ? 'text-rose-600' : 'text-slate-600'}">${late}</strong></span>
+              </div>
+              <div class="w-full h-1.5 bg-slate-200 rounded-full mt-1.5 overflow-hidden">
+                <div class="h-full bg-indigo-500 rounded-full" style="width:${avgProg}%"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==========================================
+    // 2. RENDER AGENDA HARI INI
+    // ==========================================
+    function setAgendaDateToday() {
+      document.getElementById('agenda-date-picker').value = getTodayWIB();
+      renderTodayView();
+    }
+
+    function ensureAgendaDateRecord(dateStr) {
+      if (!db.dailyAgenda) db.dailyAgenda = {};
+      if (!db.dailyAgenda[dateStr]) {
+        db.dailyAgenda[dateStr] = {
+          top3: ['', '', ''],
+          customChecklist: [
+            { id: 'c_' + Date.now(), text: 'Briefing koordinasi pagi dan pemeriksaan target harian tim', done: false }
+          ],
+          eval: { q1: '', q2: '', q3: '', q4: '', q5: '' }
+        };
+      }
+      return db.dailyAgenda[dateStr];
+    }
+
+    function renderTodayView() {
+      const picker = document.getElementById('agenda-date-picker');
+      if (!picker.value) picker.value = getTodayWIB();
+      const selectedDate = picker.value;
+      const agendaRec = ensureAgendaDateRecord(selectedDate);
+
+      // Render 3 Prioritas Utama Hari Ini
+      const activeTasks = db.tasks.filter(t => t.status !== 'Selesai');
+      document.getElementById('top-3-priorities-container').innerHTML = [0, 1, 2].map(idx => {
+        const chosenId = agendaRec.top3[idx] || '';
+        const chosenTask = db.tasks.find(t => t.id === chosenId);
+        return `
+          <div class="bg-slate-800/90 border border-slate-700 p-3.5 rounded-xl flex flex-col justify-between space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 bg-amber-400 text-slate-950 rounded text-[10px] font-extrabold">PRIORITAS #${idx + 1}</span>
+              ${chosenTask ? getStatusBadge(chosenTask.status) : ''}
+            </div>
+            <select onchange="updateTop3Priority(${idx}, this.value)" class="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-medium">
+              <option value="">-- Pilih Pekerjaan Prioritas #${idx + 1} --</option>
+              ${activeTasks.map(t => `<option value="${t.id}" ${t.id === chosenId ? 'selected' : ''}>[${t.priority}] ${t.name} (${t.pic || 'Tanpa PIC'})</option>`).join('')}
+            </select>
+            ${chosenTask ? `
+              <div class="text-[11px] text-slate-300 flex items-center justify-between pt-1">
+                <span>PIC: <strong>${chosenTask.pic || '-'}</strong></span>
+                <span>Progress: <strong>${computeTaskProgress(chosenTask)}%</strong></span>
+              </div>
+            ` : `<p class="text-[11px] text-slate-400 italic">Belum dipilih</p>`}
+          </div>
+        `;
+      }).join('');
+
+      // Kategori Otomatis Halaman Pekerjaan Hari Ini
+      const dueToday = db.tasks.filter(t => t.deadline === selectedDate && t.status !== 'Selesai');
+      const overdue = db.tasks.filter(t => isTaskOverdue(t, selectedDate));
+      const scheduledToday = db.tasks.filter(t => t.startDate <= selectedDate && (!t.deadline || t.deadline >= selectedDate) && t.status === 'Sedang Dikerjakan');
+      const highPriority = db.tasks.filter(t => (t.priority === 'Kritis' || t.priority === 'Tinggi') && t.status !== 'Selesai');
+      const needReview = db.tasks.filter(t => t.status === 'Menunggu Pemeriksaan' || t.status === 'Revisi');
+      const needFollowUp = db.tasks.filter(t => t.clientFollowUp && t.status !== 'Selesai');
+      const needBilling = db.billings.filter(b => b.payStatus !== 'Lunas' && (!b.followUpDate || b.followUpDate <= selectedDate));
+
+      const categories = [
+        { title: '1. Deadline Hari Ini & Terlambat', icon: 'fa-calendar-xmark text-rose-600', items: [...overdue, ...dueToday] },
+        { title: '2. Harus Diperiksa Team Leader (Meja QC)', icon: 'fa-clipboard-check text-purple-600', items: needReview },
+        { title: '3. Prioritas Kritis & Tinggi Aktif', icon: 'fa-bolt text-amber-500', items: highPriority },
+        { title: '4. Dijadwalkan Dikerjakan Hari Ini', icon: 'fa-person-digging text-sky-600', items: scheduledToday },
+        { title: '5. Perlu Tindak Lanjut ke Owner / Instansi / Rekan', icon: 'fa-phone-volume text-indigo-600', items: needFollowUp }
+      ];
+
+      let htmlGrid = categories.map(cat => `
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h4 class="text-xs font-bold text-slate-800 uppercase mb-3 flex items-center gap-2">
+            <i class="fa-solid ${cat.icon}"></i> ${cat.title} (${cat.items.length})
+          </h4>
+          <div class="space-y-2 max-h-56 overflow-y-auto">
+            ${cat.items.length === 0 ? `<p class="text-xs text-slate-400 italic">Tidak ada item pada kategori ini.</p>` : cat.items.map(t => `
+              <div class="p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 flex items-center justify-between gap-2 text-xs">
+                <label class="flex items-start gap-2.5 cursor-pointer flex-1">
+                  <input type="checkbox" ${t.status === 'Selesai' ? 'checked' : ''} onchange="quickToggleTaskDone('${t.id}', this.checked)" class="mt-0.5 rounded text-emerald-600" />
+                  <div>
+                    <span class="font-semibold text-slate-800 ${t.status === 'Selesai' ? 'line-through text-slate-400' : ''}">${t.name}</span>
+                    <div class="text-[11px] text-slate-500">${getProjectName(t.projectId)} &bull; PIC: <strong>${t.pic || '-'}</strong> &bull; Batas: ${formatDateID(t.deadline)}</div>
+                  </div>
+                </label>
+                ${getPriorityBadge(t.priority)}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      // Kategori ke-6: Tagihan yang Perlu Ditagih Pembayarannya
+      htmlGrid += `
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h4 class="text-xs font-bold text-slate-800 uppercase mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-hand-holding-dollar text-emerald-600"></i> 6. Pekerjaan / Termin yang Perlu Ditagih Pembayarannya (${needBilling.length})
+          </h4>
+          <div class="space-y-2 max-h-56 overflow-y-auto">
+            ${needBilling.length === 0 ? `<p class="text-xs text-slate-400 italic">Tidak ada jadwal follow-up penagihan hari ini.</p>` : needBilling.map(b => `
+              <div class="p-2.5 rounded-lg border border-emerald-200 bg-emerald-50/40 flex items-center justify-between gap-2 text-xs">
+                <div>
+                  <span class="font-bold text-slate-800">${getProjectName(b.projectId)} — ${b.term}</span>
+                  <div class="text-[11px] text-slate-600">Klien: ${b.client} &bull; Sisa Tagihan: <strong class="text-rose-600">${formatRupiah(b.invoiceVal - b.paidVal)}</strong> &bull; PIC: ${b.pic}</div>
+                </div>
+                <button onclick="switchTab('billing')" class="px-2.5 py-1 bg-emerald-600 text-white rounded text-[11px] font-semibold">Detail</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      document.getElementById('today-categories-grid').innerHTML = htmlGrid;
+
+      // Render Checklist Harian Pribadi
+      document.getElementById('daily-custom-checklist').innerHTML = agendaRec.customChecklist.map(item => `
+        <div class="flex items-center justify-between p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-xs">
+          <label class="flex items-center gap-2.5 cursor-pointer flex-1">
+            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleDailyCheckItem('${item.id}')" class="rounded text-sky-600" />
+            <span class="${item.done ? 'line-through text-slate-400' : 'text-slate-800 font-medium'}">${item.text}</span>
+          </label>
+          <button onclick="deleteDailyCheckItem('${item.id}')" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash-can"></i></button>
+        </div>
+      `).join('');
+
+      // Isi Form Evaluasi Akhir Hari
+      document.getElementById('eval-q1').value = agendaRec.eval.q1 || '';
+      document.getElementById('eval-q2').value = agendaRec.eval.q2 || '';
+      document.getElementById('eval-q3').value = agendaRec.eval.q3 || '';
+      document.getElementById('eval-q4').value = agendaRec.eval.q4 || '';
+      document.getElementById('eval-q5').value = agendaRec.eval.q5 || '';
+    }
+
+    function updateTop3Priority(idx, taskId) {
+      const d = document.getElementById('agenda-date-picker').value || getTodayWIB();
+      const rec = ensureAgendaDateRecord(d);
+      rec.top3[idx] = taskId;
+      saveDatabase();
+      renderTodayView();
+    }
+
+    function addDailyCheckItem() {
+      const input = document.getElementById('new-daily-check-input');
+      const text = input.value.trim();
+      if (!text) return;
+      const d = document.getElementById('agenda-date-picker').value || getTodayWIB();
+      const rec = ensureAgendaDateRecord(d);
+      rec.customChecklist.push({ id: 'dc_' + Date.now(), text, done: false });
+      input.value = '';
+      saveDatabase();
+      renderTodayView();
+    }
+
+    function toggleDailyCheckItem(itemId) {
+      const d = document.getElementById('agenda-date-picker').value || getTodayWIB();
+      const rec = ensureAgendaDateRecord(d);
+      const item = rec.customChecklist.find(x => x.id === itemId);
+      if (item) item.done = !item.done;
+      saveDatabase();
+      renderTodayView();
+    }
+
+    function deleteDailyCheckItem(itemId) {
+      const d = document.getElementById('agenda-date-picker').value || getTodayWIB();
+      const rec = ensureAgendaDateRecord(d);
+      rec.customChecklist = rec.customChecklist.filter(x => x.id !== itemId);
+      saveDatabase();
+      renderTodayView();
+    }
+
+    function saveDailyEvaluation() {
+      const d = document.getElementById('agenda-date-picker').value || getTodayWIB();
+      const rec = ensureAgendaDateRecord(d);
+      rec.eval = {
+        q1: document.getElementById('eval-q1').value,
+        q2: document.getElementById('eval-q2').value,
+        q3: document.getElementById('eval-q3').value,
+        q4: document.getElementById('eval-q4').value,
+        q5: document.getElementById('eval-q5').value
+      };
+      saveDatabase();
+      const badge = document.getElementById('eval-saved-badge');
+      badge.classList.remove('hidden');
+      setTimeout(() => badge.classList.add('hidden'), 1800);
+    }
+
+    function quickToggleTaskDone(taskId, isChecked) {
+      const t = db.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      if (isChecked) {
+        t.status = 'Menunggu Pemeriksaan';
+        alert('Sesuai prosedur Quality Control CV. Design Salsabila, pekerjaan yang dicentang masuk ke status "Menunggu Pemeriksaan" agar diverifikasi Team Leader terlebih dahulu.');
+      } else {
+        t.status = 'Sedang Dikerjakan';
+      }
+      t.lastUpdated = getTodayWIB();
+      t.progressChangedRecently = true;
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    // ==========================================
+    // 3. RENDER TO-DO LIST & SUB-CHECKLIST
+    // ==========================================
+    const PRIORITY_RANK = { 'Kritis': 4, 'Tinggi': 3, 'Sedang': 2, 'Rendah': 1 };
+
+    function renderTodosView() {
+      const search = (document.getElementById('todo-search').value || '').toLowerCase();
+      const fProj = document.getElementById('todo-filter-project').value;
+      const fDiv = document.getElementById('todo-filter-divisi').value;
+      const fPic = document.getElementById('todo-filter-pic').value;
+      const fStat = document.getElementById('todo-filter-status').value;
+      const fPrio = document.getElementById('todo-filter-priority').value;
+      const sortBy = document.getElementById('todo-sort').value;
+      const today = getTodayWIB();
+
+      let list = db.tasks.filter(t => {
+        if (fProj !== 'ALL' && t.projectId !== fProj) return false;
+        if (fDiv !== 'ALL' && t.divisi !== fDiv) return false;
+        if (fPic !== 'ALL' && t.pic !== fPic) return false;
+        if (fStat !== 'ALL' && t.status !== fStat) return false;
+        if (fPrio !== 'ALL' && t.priority !== fPrio) return false;
+        if (search) {
+          const hay = `${t.name} ${t.pic} ${t.obstacle} ${t.notes} ${getProjectName(t.projectId)}`.toLowerCase();
+          if (!hay.includes(search)) return false;
+        }
+        return true;
+      });
+
+      list.sort((a, b) => {
+        if (sortBy === 'deadline_asc') return (a.deadline || '9999').localeCompare(b.deadline || '9999');
+        if (sortBy === 'priority_desc') return (PRIORITY_RANK[b.priority] || 0) - (PRIORITY_RANK[a.priority] || 0);
+        if (sortBy === 'progress_asc') return computeTaskProgress(a) - computeTaskProgress(b);
+        if (sortBy === 'progress_desc') return computeTaskProgress(b) - computeTaskProgress(a);
+        return 0;
+      });
+
+      const container = document.getElementById('todos-list-container');
+      if (list.length === 0) {
+        container.innerHTML = `<div class="bg-white p-8 rounded-xl border border-slate-200 text-center text-xs text-slate-500">Tidak ada pekerjaan yang cocok dengan filter pencarian.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(t => {
+        const prog = computeTaskProgress(t);
+        const overdue = isTaskOverdue(t, today);
+        return `
+          <div class="bg-white rounded-xl border ${overdue ? 'border-rose-400' : 'border-slate-200'} shadow-sm p-4 space-y-3">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div class="space-y-1 flex-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  ${getPriorityBadge(t.priority)}
+                  ${getStatusBadge(t.status)}
+                  <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px] font-semibold">${t.divisi}</span>
+                  <span class="px-2 py-0.5 bg-sky-50 text-sky-700 rounded text-[10px] font-semibold">Bobot: ${t.weight}%</span>
+                  ${overdue ? `<span class="px-2 py-0.5 bg-rose-600 text-white rounded text-[10px] font-bold">TERLAMBAT</span>` : ''}
+                  ${!t.pic ? `<span class="px-2 py-0.5 bg-red-600 text-white rounded text-[10px] font-bold">TANPA PIC!</span>` : ''}
+                </div>
+                <h4 class="text-sm font-bold text-slate-800">${t.name}</h4>
+                <p class="text-xs text-slate-500">
+                  <strong>Proyek:</strong> ${getProjectName(t.projectId)} (${t.stage} &bull; ${t.subStage})
+                </p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="openTaskModal('${t.id}')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
+                </button>
+                <button onclick="deleteTask('${t.id}')" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-semibold">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Baris Meta & Progress Bar -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2 border-t border-slate-100 text-xs">
+              <div>
+                <span class="text-slate-400 block text-[10px] uppercase font-bold">PIC Utama & Pendukung</span>
+                <span class="font-semibold text-slate-800">${t.pic || '<span class="text-rose-600">Belum Ditetapkan</span>'}</span>
+                ${t.support ? `<span class="text-[11px] text-slate-500 block">Pendukung: ${t.support}</span>` : ''}
+              </div>
+              <div>
+                <span class="text-slate-400 block text-[10px] uppercase font-bold">Jadwal Mulai — Deadline</span>
+                <span class="font-medium text-slate-700">${formatDateID(t.startDate)} s/d <strong>${formatDateID(t.deadline)}</strong></span>
+              </div>
+              <div class="md:col-span-2">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-[10px] uppercase font-bold text-slate-500">
+                    Progress (${t.manualProgressMode ? 'Mode Manual' : 'Otomatis dari Checklist'})
+                  </span>
+                  <span class="font-extrabold text-sky-700">${prog}%</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                  <div class="h-full ${prog === 100 ? 'bg-emerald-500' : 'bg-sky-500'} transition-all" style="width:${prog}%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Checklist Sub-Pekerjaan Interaktif -->
+            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200/80 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-700"><i class="fa-solid fa-list-check mr-1 text-sky-600"></i> Sub-Pekerjaan / Checklist Teknis (${(t.subtasks || []).filter(s => s.done).length}/${(t.subtasks || []).length})</span>
+                <label class="text-[11px] text-slate-500 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" ${t.manualProgressMode ? 'checked' : ''} onchange="toggleTaskManualMode('${t.id}', this.checked)" class="rounded" />
+                  <span>Gunakan Slider Manual</span>
+                </label>
+              </div>
+
+              ${t.manualProgressMode ? `
+                <div class="flex items-center gap-3 pt-1">
+                  <input type="range" min="0" max="100" value="${t.progress}" onchange="updateTaskManualSlider('${t.id}', this.value)" class="flex-1" />
+                  <span class="text-xs font-bold w-12 text-right">${t.progress}%</span>
+                </div>
+              ` : ''}
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                ${(t.subtasks || []).map(sub => `
+                  <label class="flex items-center gap-2 p-1.5 bg-white rounded border border-slate-200 text-xs cursor-pointer hover:border-sky-400">
+                    <input type="checkbox" ${sub.done ? 'checked' : ''} onchange="toggleSubtask('${t.id}', '${sub.id}')" class="rounded text-sky-600" />
+                    <span class="${sub.done ? 'line-through text-slate-400' : 'text-slate-700'}">${sub.title}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Kendala, Catatan Team Leader & Tindakan Selanjutnya -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs pt-1">
+              <div class="p-2 rounded bg-rose-50/60 border border-rose-100">
+                <strong class="text-rose-800 block text-[10px] uppercase">Kendala:</strong>
+                <span class="text-slate-700">${t.obstacle || '- Tidak ada kendala -'}</span>
+              </div>
+              <div class="p-2 rounded bg-amber-50/60 border border-amber-100">
+                <strong class="text-amber-900 block text-[10px] uppercase">Catatan Team Leader:</strong>
+                <span class="text-slate-700">${t.notes || '-'}</span>
+              </div>
+              <div class="p-2 rounded bg-sky-50/60 border border-sky-100">
+                <strong class="text-sky-900 block text-[10px] uppercase">Tindakan Selanjutnya:</strong>
+                <span class="text-slate-700">${t.nextAction || '-'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleSubtask(taskId, subId) {
+      const t = db.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      const sub = (t.subtasks || []).find(s => s.id === subId);
+      if (sub) sub.done = !sub.done;
+      t.progress = computeTaskProgress(t);
+      t.lastUpdated = getTodayWIB();
+      t.progressChangedRecently = true;
+      if (t.progress === 100 && t.status === 'Sedang Dikerjakan') {
+        t.status = 'Menunggu Pemeriksaan';
+      } else if (t.progress > 0 && t.status === 'Belum Dimulai') {
+        t.status = 'Sedang Dikerjakan';
+      }
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    function toggleTaskManualMode(taskId, isManual) {
+      const t = db.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      t.manualProgressMode = isManual;
+      t.progress = computeTaskProgress(t);
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    function updateTaskManualSlider(taskId, val) {
+      const t = db.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      t.progress = Number(val);
+      t.lastUpdated = getTodayWIB();
+      t.progressChangedRecently = true;
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    // ==========================================
+    // 4. RENDER MATRIKS PEKERJAAN
+    // ==========================================
+    function renderMatrixView() {
+      const search = (document.getElementById('matrix-search').value || '').toLowerCase();
+      const fProj = document.getElementById('matrix-filter-project').value;
+      const fStage = document.getElementById('matrix-filter-stage').value;
+      const fPic = document.getElementById('matrix-filter-pic').value;
+      const fStat = document.getElementById('matrix-filter-status').value;
+      const dFrom = document.getElementById('matrix-date-from').value;
+      const dTo = document.getElementById('matrix-date-to').value;
+      const sortMode = document.getElementById('matrix-sort').value;
+      const today = getTodayWIB();
+
+      let rows = db.tasks.filter(t => {
+        if (fProj !== 'ALL' && t.projectId !== fProj) return false;
+        if (fStage !== 'ALL' && t.stage !== fStage) return false;
+        if (fPic !== 'ALL' && t.pic !== fPic) return false;
+        if (fStat !== 'ALL' && t.status !== fStat) return false;
+        if (dFrom && (!t.deadline || t.deadline < dFrom)) return false;
+        if (dTo && (!t.deadline || t.deadline > dTo)) return false;
+        if (search) {
+          const hay = `${t.name} ${t.subStage} ${t.pic} ${t.obstacle} ${getProjectName(t.projectId)}`.toLowerCase();
+          if (!hay.includes(search)) return false;
+        }
+        return true;
+      });
+
+      rows.sort((a, b) => {
+        if (sortMode === 'deadline') return (a.deadline || '9999').localeCompare(b.deadline || '9999');
+        if (sortMode === 'priority') return (PRIORITY_RANK[b.priority] || 0) - (PRIORITY_RANK[a.priority] || 0);
+        if (sortMode === 'progress') return computeTaskProgress(a) - computeTaskProgress(b);
+        const pComp = a.projectId.localeCompare(b.projectId);
+        if (pComp !== 0) return pComp;
+        return a.stage.localeCompare(b.stage);
+      });
+
+      const tbody = document.getElementById('matrix-table-body');
+      tbody.innerHTML = rows.map(t => {
+        const prog = computeTaskProgress(t);
+        const overdue = isTaskOverdue(t, today);
+        return `
+          <tr class="hover:bg-slate-50 ${overdue ? 'bg-rose-50/40' : ''}">
+            <td class="p-3 font-bold text-slate-800">${getProjectName(t.projectId)}</td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded bg-slate-800 text-white text-[10px] font-bold">${t.stage}</span>
+              <div class="text-[11px] text-slate-500 mt-1">${t.subStage || '-'}</div>
+            </td>
+            <td class="p-3">
+              <div class="font-semibold text-slate-800">${t.name}</div>
+              <div class="mt-1">${getPriorityBadge(t.priority)} <span class="text-[11px] text-slate-400 ml-1">${t.divisi}</span></div>
+            </td>
+            <td class="p-3">
+              <div class="font-semibold text-slate-800">${t.pic || '<span class="text-rose-600">Tanpa PIC</span>'}</div>
+              ${t.support ? `<div class="text-[10px] text-slate-500">+ ${t.support}</div>` : ''}
+            </td>
+            <td class="p-3 whitespace-nowrap">
+              <div class="${overdue ? 'text-rose-600 font-bold' : 'text-slate-700'}">${formatDateID(t.deadline)}</div>
+              ${overdue ? `<span class="text-[10px] text-rose-600 font-bold">Lewat Batas!</span>` : ''}
+            </td>
+            <td class="p-3">
+              <div class="flex items-center justify-between text-[11px] mb-1">
+                <span class="font-bold text-sky-700">${prog}%</span>
+                <span class="text-slate-400">Bobot ${t.weight}%</span>
+              </div>
+              <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div class="h-full ${prog === 100 ? 'bg-emerald-500' : 'bg-sky-500'}" style="width:${prog}%"></div>
+              </div>
+            </td>
+            <td class="p-3">${getStatusBadge(t.status)}</td>
+            <td class="p-3 text-rose-700 max-w-xs">${t.obstacle || '<span class="text-slate-400">-</span>'}</td>
+            <td class="p-3 text-slate-700 max-w-xs">${t.nextAction || '-'}</td>
+            <td class="p-3 text-center">
+              <button onclick="openTaskModal('${t.id}')" class="p-1.5 bg-slate-100 hover:bg-slate-200 rounded text-slate-700"><i class="fa-solid fa-pen"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ==========================================
+    // 5. RENDER MONITORING PROGRESS PROYEK
+    // ==========================================
+    function renderProjectsView() {
+      const today = getTodayWIB();
+      const stages = ['A. KONTRAK', 'B. PERENCANAAN', 'C. PELAKSANAAN / PENGAWASAN', 'D. PENAGIHAN'];
+
+      document.getElementById('projects-detail-container').innerHTML = db.projects.map(p => {
+        const actualProg = computeProjectWeightedProgress(p.id);
+        const projTasks = db.tasks.filter(t => t.projectId === p.id);
+        const isLate = p.deadline < today && actualProg < 100;
+
+        // Hitung progress per tahapan
+        const stageBreakdown = stages.map(st => {
+          const stTasks = projTasks.filter(t => t.stage === st);
+          if (stTasks.length === 0) return { stage: st, prog: 0, count: 0 };
+          const avg = Math.round(stTasks.reduce((acc, item) => acc + computeTaskProgress(item), 0) / stTasks.length);
+          return { stage: st, prog: avg, count: stTasks.length };
+        });
+
+        return `
+          <div class="bg-white rounded-2xl border ${isLate ? 'border-rose-400' : 'border-slate-200'} shadow-sm overflow-hidden">
+            ${isLate ? `
+              <div class="bg-rose-600 text-white px-5 py-2 text-xs font-bold flex items-center justify-between">
+                <span><i class="fa-solid fa-triangle-exclamation mr-1.5"></i> PERINGATAN KETERLAMBATAN PROYEK: Deadline proyek (${formatDateID(p.deadline)}) telah terlewati dan progress aktual baru mencapai ${actualProg}%!</span>
+                <span>Segera lakukan percepatan / adendum waktu</span>
+              </div>
+            ` : ''}
+
+            <div class="p-5 space-y-5">
+              <div class="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-800">${p.status}</span>
+                    <span class="text-xs text-slate-400 font-mono">No. Kontrak: ${p.contractNo || '-'}</span>
+                  </div>
+                  <h3 class="text-base font-extrabold text-slate-900 mt-1">${p.name}</h3>
+                  <p class="text-xs text-slate-600">Klien / Instansi: <strong>${p.client}</strong> &bull; Jadwal: ${formatDateID(p.startDate)} s/d <strong>${formatDateID(p.deadline)}</strong></p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button onclick="openProjectModal('${p.id}')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-semibold">Edit Proyek</button>
+                  <button onclick="deleteProject('${p.id}')" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </div>
+
+              <!-- Progress Bar Proyek Berbobot vs Target -->
+              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-slate-700">Progress Aktual Tertimbang (Berdasarkan Bobot Pekerjaan)</span>
+                  <div>
+                    <span class="text-lg font-extrabold text-sky-700">${actualProg}%</span>
+                    <span class="text-slate-400 ml-2">(Target Saat Ini: ${p.targetProgress}%)</span>
+                  </div>
+                </div>
+                <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden">
+                  <div class="h-full ${actualProg >= p.targetProgress ? 'bg-emerald-500' : 'bg-sky-600'} transition-all" style="width:${actualProg}%"></div>
+                </div>
+              </div>
+
+              <!-- Rincian Progress Berdasarkan 4 Tahapan -->
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                ${stageBreakdown.map(sb => `
+                  <div class="p-3 rounded-xl border border-slate-200 bg-white">
+                    <div class="text-[11px] font-bold text-slate-700">${sb.stage}</div>
+                    <div class="flex items-end justify-between mt-1">
+                      <span class="text-base font-extrabold text-slate-900">${sb.prog}%</span>
+                      <span class="text-[10px] text-slate-400">${sb.count} Pekerjaan</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-slate-100 rounded-full mt-2 overflow-hidden">
+                      <div class="h-full bg-indigo-500" style="width:${sb.prog}%"></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- Info PIC, Kendala & Catatan TL -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <strong class="text-slate-500 block text-[10px] uppercase">PIC Utama & Tim Proyek</strong>
+                  <p class="font-bold text-slate-800 mt-0.5">${p.pic}</p>
+                  <p class="text-slate-500 text-[11px] mt-0.5">Anggota: ${p.team || '-'}</p>
+                </div>
+                <div class="p-3 rounded-lg bg-rose-50/50 border border-rose-200">
+                  <strong class="text-rose-700 block text-[10px] uppercase">Kendala Proyek</strong>
+                  <p class="text-slate-700 mt-0.5">${p.obstacle || 'Tidak ada kendala signifikan.'}</p>
+                </div>
+                <div class="p-3 rounded-lg bg-amber-50/50 border border-amber-200">
+                  <strong class="text-amber-900 block text-[10px] uppercase">Catatan Team Leader & Langkah Lanjut</strong>
+                  <p class="text-slate-700 mt-0.5">${p.notes || '-'}</p>
+                </div>
+              </div>
+
+              <!-- Riwayat Perubahan Progress & Catatan Perkembangan -->
+              <div class="border-t border-slate-200 pt-4">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-xs font-bold text-slate-700"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Perubahan Progress & Log Perkembangan</h4>
+                </div>
+                <div class="flex gap-2 mb-3">
+                  <input type="text" id="proj-log-input-${p.id}" placeholder="Catat perkembangan terbaru atau perubahan progress proyek ini..." class="flex-1 px-3 py-1.5 border border-slate-300 rounded-lg text-xs" />
+                  <button onclick="addProjectHistoryLog('${p.id}')" class="px-3 py-1.5 bg-slate-800 text-white rounded-lg text-xs font-semibold">Tambah Log</button>
+                </div>
+                <div class="space-y-1.5 max-h-36 overflow-y-auto text-xs">
+                  ${(p.history || []).map(h => `
+                    <div class="flex items-center gap-2 text-slate-600 bg-slate-50 px-3 py-1.5 rounded border border-slate-200">
+                      <span class="font-mono text-[11px] font-bold text-sky-700 shrink-0">[${formatDateID(h.date)}]</span>
+                      <span>${h.text}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function addProjectHistoryLog(projId) {
+      const inp = document.getElementById(`proj-log-input-${projId}`);
+      const text = inp.value.trim();
+      if (!text) return;
+      const p = db.projects.find(x => x.id === projId);
+      if (!p) return;
+      if (!p.history) p.history = [];
+      p.history.unshift({ date: getTodayWIB(), text });
+      inp.value = '';
+      saveDatabase();
+      renderProjectsView();
+    }
+
+    // ==========================================
+    // 6. RENDER KONTROL TIM DAN PEMBAGIAN TUGAS
+    // ==========================================
+    function renderTeamView() {
+      const today = getTodayWIB();
+      document.getElementById('team-cards-container').innerHTML = db.members.map(m => {
+        const myTasks = db.tasks.filter(t => t.pic === m.name);
+        const active = myTasks.filter(t => t.status !== 'Selesai');
+        const done = myTasks.filter(t => t.status === 'Selesai');
+        const late = myTasks.filter(t => isTaskOverdue(t, today));
+        const onTimeRate = myTasks.length > 0 ? Math.round(((myTasks.length - late.length) / myTasks.length) * 100) : 100;
+        const avgProg = myTasks.length > 0 ? Math.round(myTasks.reduce((a, b) => a + computeTaskProgress(b), 0) / myTasks.length) : 0;
+        const reportedObstacles = myTasks.filter(t => t.obstacle && t.obstacle.trim() !== '');
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-slate-900 text-sky-400 flex items-center justify-center font-extrabold text-sm">
+                  ${m.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">${m.name}</h4>
+                  <p class="text-xs text-slate-500">${m.role} &bull; <span class="font-semibold text-sky-700">${m.divisi}</span></p>
+                </div>
+              </div>
+              <button onclick="openMemberModal('${m.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-semibold">Evaluasi / Edit</button>
+            </div>
+
+            <!-- Metrik Objektif Kinerja -->
+            <div class="grid grid-cols-4 gap-2 text-center bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Tugas Aktif</span>
+                <span class="text-base font-extrabold text-sky-700">${active.length}</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Selesai</span>
+                <span class="text-base font-extrabold text-emerald-600">${done.length}</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Terlambat</span>
+                <span class="text-base font-extrabold ${late.length > 0 ? 'text-rose-600' : 'text-slate-700'}">${late.length}</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 uppercase font-bold block">Ketepatan Waktu</span>
+                <span class="text-base font-extrabold text-indigo-600">${onTimeRate}%</span>
+              </div>
+            </div>
+
+            <!-- Daftar Tanggung Jawab Pekerjaan -->
+            <div>
+              <div class="flex items-center justify-between text-xs mb-2">
+                <span class="font-bold text-slate-700">Daftar Tanggung Jawab Pekerjaan (PIC Utama)</span>
+                <span class="text-slate-500">Rata-rata Progress: <strong>${avgProg}%</strong></span>
+              </div>
+              <div class="space-y-1.5 max-h-44 overflow-y-auto">
+                ${myTasks.length === 0 ? `<p class="text-xs text-slate-400 italic">Belum ada pekerjaan yang ditugaskan.</p>` : myTasks.map(t => `
+                  <div class="p-2 rounded border border-slate-200 flex items-center justify-between text-xs">
+                    <div class="truncate pr-2">
+                      <span class="font-semibold text-slate-800">${t.name}</span>
+                      <span class="text-[11px] text-slate-400 block">${getProjectName(t.projectId)} &bull; Deadline: ${formatDateID(t.deadline)}</span>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                      <span class="font-bold text-sky-700">${computeTaskProgress(t)}%</span>
+                      ${getStatusBadge(t.status)}
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Kendala yang Dilaporkan & Catatan Evaluasi -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-2 border-t border-slate-100">
+              <div class="p-2.5 rounded-lg bg-rose-50/50 border border-rose-100">
+                <strong class="text-rose-800 text-[10px] uppercase block">Kendala yang Dilaporkan (${reportedObstacles.length})</strong>
+                ${reportedObstacles.length === 0 ? `<span class="text-slate-400">Tidak ada kendala aktif</span>` : reportedObstacles.map(o => `<div class="mt-1 text-slate-700">&bull; ${o.obstacle}</div>`).join('')}
+              </div>
+              <div class="p-2.5 rounded-lg bg-amber-50/50 border border-amber-100">
+                <strong class="text-amber-900 text-[10px] uppercase block">Catatan Evaluasi Team Leader</strong>
+                <p class="text-slate-700 mt-1">${m.evalNotes || '-'}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==========================================
+    // 7. RENDER PEMERIKSAAN DAN REVISI (QC GATE)
+    // ==========================================
+    function renderReviewView() {
+      const mode = document.getElementById('review-filter-mode').value;
+      const list = db.tasks.filter(t => {
+        if (mode === 'NEED_REVIEW') return t.status === 'Menunggu Pemeriksaan' || t.status === 'Revisi';
+        return true;
+      });
+
+      const container = document.getElementById('review-list-container');
+      if (list.length === 0) {
+        container.innerHTML = `<div class="bg-white p-8 rounded-xl border border-slate-200 text-center text-xs text-slate-500">Tidak ada pekerjaan yang sedang menunggu pemeriksaan saat ini.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(t => {
+        if (!Array.isArray(t.qcChecklist) || t.qcChecklist.length !== 7) {
+          t.qcChecklist = [false, false, false, false, false, false, false];
+        }
+        const passedCount = t.qcChecklist.filter(Boolean).length;
+
+        return `
+          <div class="bg-white rounded-2xl border-2 ${t.status === 'Menunggu Pemeriksaan' ? 'border-purple-400' : 'border-slate-200'} shadow-sm p-5 space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  ${getStatusBadge(t.status)}
+                  ${getPriorityBadge(t.priority)}
+                  <span class="text-xs text-slate-500">PIC: <strong>${t.pic || '-'}</strong></span>
+                </div>
+                <h4 class="text-sm font-bold text-slate-900 mt-1">${t.name}</h4>
+                <p class="text-xs text-slate-500">${getProjectName(t.projectId)} &bull; Tahapan: ${t.stage} (${t.subStage})</p>
+              </div>
+              <div class="text-right text-xs">
+                <span class="font-bold text-purple-700">Kelulusan Checklist QC: ${passedCount}/7 Kriteria</span>
+                <div class="text-[11px] text-slate-400">Pemeriksa Terakhir: ${t.qcReviewer || 'Nurul Ilmi, S.Ars'} (${t.qcDate ? formatDateID(t.qcDate) : 'Belum diperiksa'})</div>
+              </div>
+            </div>
+
+            <!-- 7 Item Checklist Pemeriksaan Standar -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <h5 class="text-xs font-bold text-slate-700 mb-2.5">Checklist Pemeriksaan Dokumen & Teknis (Centang kriteria yang telah diverifikasi):</h5>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                ${DEFAULT_QC_ITEMS.map((label, idx) => `
+                  <label class="flex items-center gap-2.5 p-2 bg-white rounded-lg border border-slate-200 text-xs cursor-pointer hover:border-purple-400">
+                    <input type="checkbox" ${t.qcChecklist[idx] ? 'checked' : ''} onchange="toggleQcItem('${t.id}', ${idx})" class="rounded text-purple-600" />
+                    <span class="${t.qcChecklist[idx] ? 'font-semibold text-emerald-800' : 'text-slate-700'}">${idx + 1}. ${label}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Input Catatan Pemeriksaan & 4 Tombol Keputusan QC -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs items-end">
+              <div>
+                <label class="font-bold text-slate-700 block mb-1">Nama Pemeriksa</label>
+                <input type="text" id="qc-rev-${t.id}" value="${t.qcReviewer || 'Nurul Ilmi, S.Ars (Team Leader)'}" class="w-full p-2 border border-slate-300 rounded-lg" />
+              </div>
+              <div class="md:col-span-2">
+                <label class="font-bold text-slate-700 block mb-1">Catatan Pemeriksaan / Instruksi Revisi / Alasan Penundaan</label>
+                <input type="text" id="qc-note-${t.id}" value="${t.qcNotes || ''}" placeholder="Tulis hasil pemeriksaan atau detail revisi..." class="w-full p-2 border border-slate-300 rounded-lg" />
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button onclick="executeQcDecision('${t.id}', 'APPROVE')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-check-double"></i> Setujui (Selesai 100%)
+              </button>
+              <button onclick="executeQcDecision('${t.id}', 'REVISE')" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-rotate-left"></i> Kembalikan untuk Revisi
+              </button>
+              <button onclick="executeQcDecision('${t.id}', 'CLARIFY')" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-comments"></i> Minta Penjelasan PIC
+              </button>
+              <button onclick="executeQcDecision('${t.id}', 'HOLD')" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-pause"></i> Tunda dengan Alasan
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleQcItem(taskId, idx) {
+      const t = db.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      t.qcChecklist[idx] = !t.qcChecklist[idx];
+      saveDatabase();
+      renderReviewView();
+    }
+
+    function executeQcDecision(taskId, action) {
+      const t = db.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      const reviewer = document.getElementById(`qc-rev-${taskId}`).value.trim() || 'Team Leader';
+      const note = document.getElementById(`qc-note-${taskId}`).value.trim();
+
+      if (action === 'APPROVE') {
+        const unverified = (t.qcChecklist || []).filter(x => !x).length;
+        if (unverified > 0) {
+          const confirmApprove = confirm(`Masih ada ${unverified} item checklist pemeriksaan yang belum dicentang. Apakah Anda yakin tetap menyetujui pekerjaan ini menjadi Selesai?`);
+          if (!confirmApprove) return;
+        }
+        t.status = 'Selesai';
+        t.progress = 100;
+        t.nextAction = 'Disetujui Team Leader — Siap diserahkan.';
+      } else if (action === 'REVISE') {
+        if (!note) { alert('Harap isi Catatan Pemeriksaan agar PIC mengetahui bagian yang harus direvisi.'); return; }
+        t.status = 'Revisi';
+        t.notes = `[REVISI TL]: ${note}`;
+        t.nextAction = 'Perbaikan dokumen sesuai catatan revisi TL.';
+      } else if (action === 'CLARIFY') {
+        t.status = 'Menunggu Pemeriksaan';
+        t.needDecision = true;
+        t.notes = `[MINTA PENJELASAN]: ${note || 'PIC diminta menghadap Team Leader untuk klarifikasi teknis.'}`;
+        t.nextAction = 'Asistensi / klarifikasi langsung dengan Team Leader.';
+      } else if (action === 'HOLD') {
+        if (!note) { alert('Harap tuliskan alasan penundaan pada kolom Catatan Pemeriksaan.'); return; }
+        t.status = 'Terhambat';
+        t.obstacle = `[DITUNDA TL]: ${note}`;
+      }
+
+      t.qcReviewer = reviewer;
+      t.qcNotes = note;
+      t.qcDate = getTodayWIB();
+      t.lastUpdated = getTodayWIB();
+      t.progressChangedRecently = true;
+      saveDatabase();
+      renderReviewView();
+    }
+
+    // ==========================================
+    // 8. RENDER KENDALA DAN KEPUTUSAN
+    // ==========================================
+    function renderIssuesView() {
+      const fCat = document.getElementById('issue-filter-category').value;
+      let list = db.issues.filter(i => fCat === 'ALL' || i.category === fCat);
+
+      const urgRank = { 'Mendesak (Blokir Progress)': 3, 'Tinggi (Berpotensi Terlambat)': 2, 'Sedang': 1 };
+      list.sort((a, b) => (urgRank[b.urgency] || 0) - (urgRank[a.urgency] || 0));
+
+      document.getElementById('issues-table-body').innerHTML = list.map(i => `
+        <tr class="hover:bg-slate-50 ${i.status === 'Menunggu Keputusan TL' ? 'bg-rose-50/40' : ''}">
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-white text-[10px] font-bold block w-fit">${i.category}</span>
+            <span class="text-[11px] font-bold ${i.urgency.includes('Mendesak') ? 'text-rose-600' : 'text-amber-600'} mt-1 block">${i.urgency}</span>
+          </td>
+          <td class="p-3 font-bold text-slate-800">${getProjectName(i.projectId)}</td>
+          <td class="p-3">
+            <div class="font-bold text-slate-900">${i.problem}</div>
+            <div class="text-[11px] text-rose-700 mt-0.5"><strong>Dampak:</strong> ${i.impact}</div>
+          </td>
+          <td class="p-3">
+            <div class="font-semibold text-slate-800">${i.pic}</div>
+            <div class="text-[11px] text-slate-400">Lapor: ${formatDateID(i.reportedDate)}</div>
+          </td>
+          <td class="p-3 font-medium text-amber-900 bg-amber-50/40">${i.decisionNeeded}</td>
+          <td class="p-3 text-slate-700">${i.solution || '<span class="text-rose-500 italic">Belum diisi</span>'}</td>
+          <td class="p-3 whitespace-nowrap font-semibold">${formatDateID(i.targetDate)}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${i.status === 'Selesai Teratasi' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${i.status}</span>
+          </td>
+          <td class="p-3 text-center">
+            <button onclick="openIssueModal('${i.id}')" class="p-1.5 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 mr-1"><i class="fa-solid fa-pen"></i></button>
+            <button onclick="deleteIssue('${i.id}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 rounded text-rose-600"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ==========================================
+    // 9. RENDER PENAGIHAN DAN ARUS PEKERJAAN
+    // ==========================================
+    function renderBillingView() {
+      const totalContract = db.billings.reduce((a, b) => a + Number(b.contractVal || 0), 0);
+      const totalInvoiced = db.billings.reduce((a, b) => a + Number(b.invoiceVal || 0), 0);
+      const totalPaid = db.billings.reduce((a, b) => a + Number(b.paidVal || 0), 0);
+      const totalRemaining = totalInvoiced - totalPaid;
+
+      document.getElementById('billing-summary-cards').innerHTML = `
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs text-slate-500 font-semibold">Total Nilai Kontrak Terdaftar</span>
+          <div class="text-lg font-extrabold text-slate-900 mt-1">${formatRupiah(totalContract)}</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs text-slate-500 font-semibold">Total Nilai Termin Ditagihkan</span>
+          <div class="text-lg font-extrabold text-sky-700 mt-1">${formatRupiah(totalInvoiced)}</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs text-slate-500 font-semibold">Nominal Sudah Diterima (Cair)</span>
+          <div class="text-lg font-extrabold text-emerald-600 mt-1">${formatRupiah(totalPaid)}</div>
+        </div>
+        <div class="bg-rose-50 p-4 rounded-xl border border-rose-200 shadow-sm">
+          <span class="text-xs text-rose-800 font-bold">Total Sisa Tagihan Belum Dibayar</span>
+          <div class="text-lg font-extrabold text-rose-600 mt-1">${formatRupiah(totalRemaining)}</div>
+        </div>
+      `;
+
+      document.getElementById('billing-table-body').innerHTML = db.billings.map(b => {
+        const proj = db.projects.find(p => p.id === b.projectId);
+        const techProg = computeProjectWeightedProgress(b.projectId);
+        const techStatus = proj ? proj.status : 'Aktif';
+        const rem = Number(b.invoiceVal || 0) - Number(b.paidVal || 0);
+        const isTechDoneUnpaid = (techProg === 100 || techStatus.includes('Selesai')) && rem > 0;
+
+        return `
+          <tr class="hover:bg-slate-50 ${isTechDoneUnpaid ? 'bg-amber-50/60' : ''}">
+            <td class="p-3">
+              <div class="font-bold text-slate-900">${getProjectName(b.projectId)}</div>
+              <div class="text-[11px] text-slate-500">${b.client}</div>
+              ${isTechDoneUnpaid ? `<span class="mt-1 inline-block px-2 py-0.5 bg-rose-600 text-white rounded text-[10px] font-bold">SELESAI TEKNIS — BELUM LUNAS!</span>` : ''}
+            </td>
+            <td class="p-3 font-semibold">${formatRupiah(b.contractVal)}</td>
+            <td class="p-3">
+              <div class="font-bold text-slate-800">${b.term}</div>
+              <div class="text-sky-700 font-semibold">${formatRupiah(b.invoiceVal)}</div>
+            </td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold text-[11px]">${techStatus} (${techProg}%)</span>
+            </td>
+            <td class="p-3">
+              <div class="font-medium text-slate-800">${b.docStatus}</div>
+              <div class="text-[11px] text-slate-400">Ajuan: ${b.submitDate ? formatDateID(b.submitDate) : 'Belum diajukan'}</div>
+            </td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${b.payStatus === 'Lunas' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'}">${b.payStatus}</span>
+            </td>
+            <td class="p-3 font-semibold text-emerald-700">${formatRupiah(b.paidVal)}</td>
+            <td class="p-3 font-extrabold ${rem > 0 ? 'text-rose-600' : 'text-slate-400'}">${formatRupiah(rem)}</td>
+            <td class="p-3">
+              <div class="font-semibold text-slate-800">${b.pic}</div>
+              <div class="text-[11px] text-rose-600 font-semibold">Follow-Up: ${formatDateID(b.followUpDate)}</div>
+            </td>
+            <td class="p-3 text-center">
+              <button onclick="openBillingModal('${b.id}')" class="p-1.5 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 mr-1"><i class="fa-solid fa-pen"></i></button>
+              <button onclick="deleteBilling('${b.id}')" class="p-1.5 bg-rose-50 hover:bg-rose-100 rounded text-rose-600"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ==========================================
+    // 10. RENDER LAPORAN TEAM LEADER & EKSPOR
+    // ==========================================
+    function renderReportsView() {
+      const period = document.getElementById('report-period').value;
+      const fProj = document.getElementById('report-project').value;
+      const fPic = document.getElementById('report-pic').value;
+      const today = getTodayWIB();
+
+      let tasks = db.tasks.filter(t => {
+        if (fProj !== 'ALL' && t.projectId !== fProj) return false;
+        if (fPic !== 'ALL' && t.pic !== fPic) return false;
+        if (period === 'DAILY') {
+          return t.deadline === today || t.lastUpdated === today || isTaskOverdue(t, today);
+        }
+        if (period === 'WEEKLY') {
+          const wAgo = addDays(today, -7);
+          const wNext = addDays(today, 7);
+          return (!t.deadline || (t.deadline >= wAgo && t.deadline <= wNext));
+        }
+        if (period === 'MONTHLY') {
+          const ym = today.slice(0, 7);
+          return (t.deadline && t.deadline.startsWith(ym)) || (t.startDate && t.startDate.startsWith(ym));
+        }
+        return true;
+      });
+
+      const doneList = tasks.filter(t => t.status === 'Selesai');
+      const runningList = tasks.filter(t => t.status === 'Sedang Dikerjakan' || t.status === 'Belum Dimulai');
+      const lateList = tasks.filter(t => isTaskOverdue(t, today));
+      const reviewList = tasks.filter(t => t.status === 'Menunggu Pemeriksaan' || t.status === 'Revisi');
+      const nextPriorityList = tasks.filter(t => t.status !== 'Selesai' && (t.priority === 'Kritis' || t.priority === 'Tinggi'));
+      const issuesList = db.issues.filter(i => fProj === 'ALL' || i.projectId === fProj);
+      const billingsList = db.billings.filter(b => fProj === 'ALL' || b.projectId === fProj);
+
+      document.getElementById('printable-report-area').innerHTML = `
+        <div class="border-b-2 border-slate-900 pb-4 flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900">LAPORAN KENDALI PEKERJAAN TEAM LEADER</h2>
+            <p class="text-xs text-slate-600 font-semibold">CV. DESIGN SALSABILA — Konsultan Perencanaan & Pengawasan Teknik Sipil</p>
+          </div>
+          <div class="text-right text-xs">
+            <div><strong>Tanggal Cetak:</strong> ${formatDateID(today)}</div>
+            <div><strong>Filter Periode:</strong> ${period}</div>
+          </div>
+        </div>
+
+        <!-- Ringkasan Statistik Laporan -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+          <div class="p-3 border border-slate-200 rounded-lg"><strong>Pekerjaan Selesai:</strong> <span class="text-base font-extrabold text-emerald-600 block">${doneList.length}</span></div>
+          <div class="p-3 border border-slate-200 rounded-lg"><strong>Pekerjaan Berjalan:</strong> <span class="text-base font-extrabold text-sky-600 block">${runningList.length}</span></div>
+          <div class="p-3 border border-slate-200 rounded-lg"><strong>Terlambat:</strong> <span class="text-base font-extrabold text-rose-600 block">${lateList.length}</span></div>
+          <div class="p-3 border border-slate-200 rounded-lg"><strong>Pemeriksaan & Revisi:</strong> <span class="text-base font-extrabold text-purple-600 block">${reviewList.length}</span></div>
+          <div class="p-3 border border-slate-200 rounded-lg"><strong>Kendala & Keputusan:</strong> <span class="text-base font-extrabold text-amber-600 block">${issuesList.length}</span></div>
+        </div>
+
+        <!-- 1. Daftar Pekerjaan Selesai & Berjalan -->
+        <div class="space-y-2 print-break">
+          <h4 class="text-xs font-bold uppercase bg-slate-100 p-2 rounded">1. Status Pelaksanaan Pekerjaan, Perubahan Progress & Pemeriksaan</h4>
+          <table class="w-full text-left border-collapse text-xs border border-slate-200">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200">
+                <th class="p-2 border-r">Pekerjaan</th>
+                <th class="p-2 border-r">Proyek</th>
+                <th class="p-2 border-r">PIC</th>
+                <th class="p-2 border-r">Deadline</th>
+                <th class="p-2 border-r">Progress</th>
+                <th class="p-2 border-r">Status & QC</th>
+                <th class="p-2">Tindakan Berikutnya</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              ${tasks.map(t => `
+                <tr>
+                  <td class="p-2 border-r font-semibold">${t.name}</td>
+                  <td class="p-2 border-r">${getProjectName(t.projectId)}</td>
+                  <td class="p-2 border-r">${t.pic || '-'}</td>
+                  <td class="p-2 border-r">${formatDateID(t.deadline)}</td>
+                  <td class="p-2 border-r font-bold">${computeTaskProgress(t)}%</td>
+                  <td class="p-2 border-r">${t.status} ${t.qcNotes ? `<div class="text-[10px] text-slate-500">QC: ${t.qcNotes}</div>` : ''}</td>
+                  <td class="p-2">${t.nextAction || '-'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 2. Kendala Utama & Keputusan yang Sudah Diambil -->
+        <div class="space-y-2 print-break">
+          <h4 class="text-xs font-bold uppercase bg-slate-100 p-2 rounded">2. Kendala Utama & Keputusan Team Leader</h4>
+          <table class="w-full text-left border-collapse text-xs border border-slate-200">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200">
+                <th class="p-2 border-r">Proyek</th>
+                <th class="p-2 border-r">Permasalahan</th>
+                <th class="p-2 border-r">Keputusan / Solusi Team Leader</th>
+                <th class="p-2">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              ${issuesList.map(i => `
+                <tr>
+                  <td class="p-2 border-r font-semibold">${getProjectName(i.projectId)}</td>
+                  <td class="p-2 border-r">${i.problem}</td>
+                  <td class="p-2 border-r">${i.solution || i.decisionNeeded}</td>
+                  <td class="p-2 font-semibold">${i.status}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 3. Pekerjaan Prioritas Berikutnya & Status Penagihan -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 print-break text-xs">
+          <div class="border border-slate-200 rounded-lg p-3">
+            <h5 class="font-bold uppercase mb-2">3. Pekerjaan Prioritas Berikutnya</h5>
+            <ul class="list-disc pl-4 space-y-1">
+              ${nextPriorityList.map(t => `<li><strong>${t.name}</strong> (${t.pic || 'Tanpa PIC'}) — Target: ${formatDateID(t.deadline)}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="border border-slate-200 rounded-lg p-3">
+            <h5 class="font-bold uppercase mb-2">4. Ringkasan Status Penagihan Proyek</h5>
+            <ul class="list-disc pl-4 space-y-1">
+              ${billingsList.map(b => `<li><strong>${getProjectName(b.projectId)} (${b.term}):</strong> Status ${b.payStatus} — Sisa Tagihan: <strong>${formatRupiah(b.invoiceVal - b.paidVal)}</strong></li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // CRUD HANDLERS (PEKERJAAN, PROYEK, TIM, KENDALA, PENAGIHAN)
+    // ==========================================
+    function toggleManualProgressInput() {
+      const isMan = document.getElementById('task-manual-mode').checked;
+      document.getElementById('task-progress').disabled = !isMan;
+    }
+
+    function openTaskModal(taskId = '') {
+      populateAllDropdowns();
+      const modal = document.getElementById('modal-task');
+      if (taskId) {
+        const t = db.tasks.find(x => x.id === taskId);
+        if (!t) return;
+        document.getElementById('modal-task-title').textContent = 'Edit Pekerjaan';
+        document.getElementById('task-id').value = t.id;
+        document.getElementById('task-name').value = t.name;
+        document.getElementById('task-project').value = t.projectId;
+        document.getElementById('task-stage').value = t.stage;
+        document.getElementById('task-substage').value = t.subStage || 'Gambar perencanaan';
+        document.getElementById('task-divisi').value = t.divisi;
+        document.getElementById('task-pic').value = t.pic || '';
+        document.getElementById('task-support').value = t.support || '';
+        document.getElementById('task-start').value = t.startDate || '';
+        document.getElementById('task-deadline').value = t.deadline || '';
+        document.getElementById('task-priority').value = t.priority;
+        document.getElementById('task-status').value = t.status;
+        document.getElementById('task-weight').value = t.weight || 10;
+        document.getElementById('task-manual-mode').checked = !!t.manualProgressMode;
+        document.getElementById('task-progress').value = computeTaskProgress(t);
+        document.getElementById('task-subtasks-text').value = (t.subtasks || []).map(s => (s.done ? '[x] ' : '') + s.title).join('\n');
+        document.getElementById('task-obstacle').value = t.obstacle || '';
+        document.getElementById('task-next').value = t.nextAction || '';
+        document.getElementById('task-notes').value = t.notes || '';
+        document.getElementById('task-need-decision').checked = !!t.needDecision;
+        document.getElementById('task-client-followup').checked = !!t.clientFollowUp;
+      } else {
+        document.getElementById('modal-task-title').textContent = 'Tambah Pekerjaan Baru';
+        document.getElementById('form-task').reset();
+        document.getElementById('task-id').value = '';
+        document.getElementById('task-start').value = getTodayWIB();
+        document.getElementById('task-deadline').value = addDays(getTodayWIB(), 3);
+      }
+      toggleManualProgressInput();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeTaskModal() {
+      const modal = document.getElementById('modal-task');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveTaskForm(e) {
+      e.preventDefault();
+      const id = document.getElementById('task-id').value;
+      const rawLines = document.getElementById('task-subtasks-text').value.split('\n').map(s => s.trim()).filter(Boolean);
+      const parsedSubtasks = rawLines.map((line, i) => {
+        const isDone = line.toLowerCase().startsWith('[x]');
+        const cleanTitle = line.replace(/^\[x\]\s*/i, '');
+        return { id: 'sub_' + Date.now() + '_' + i, title: cleanTitle, done: isDone };
+      });
+
+      const payload = {
+        id: id || 'T_' + Date.now(),
+        name: document.getElementById('task-name').value.trim(),
+        projectId: document.getElementById('task-project').value,
+        stage: document.getElementById('task-stage').value,
+        subStage: document.getElementById('task-substage').value,
+        divisi: document.getElementById('task-divisi').value,
+        pic: document.getElementById('task-pic').value,
+        support: document.getElementById('task-support').value.trim(),
+        startDate: document.getElementById('task-start').value,
+        deadline: document.getElementById('task-deadline').value,
+        priority: document.getElementById('task-priority').value,
+        status: document.getElementById('task-status').value,
+        weight: Number(document.getElementById('task-weight').value || 10),
+        manualProgressMode: document.getElementById('task-manual-mode').checked,
+        progress: Number(document.getElementById('task-progress').value || 0),
+        subtasks: parsedSubtasks,
+        obstacle: document.getElementById('task-obstacle').value.trim(),
+        nextAction: document.getElementById('task-next').value.trim(),
+        notes: document.getElementById('task-notes').value.trim(),
+        needDecision: document.getElementById('task-need-decision').checked,
+        clientFollowUp: document.getElementById('task-client-followup').checked,
+        lastUpdated: getTodayWIB(),
+        progressChangedRecently: true
+      };
+
+      if (id) {
+        const idx = db.tasks.findIndex(x => x.id === id);
+        if (idx > -1) {
+          payload.qcChecklist = db.tasks[idx].qcChecklist || [false, false, false, false, false, false, false];
+          payload.qcReviewer = db.tasks[idx].qcReviewer || '';
+          payload.qcDate = db.tasks[idx].qcDate || '';
+          payload.qcNotes = db.tasks[idx].qcNotes || '';
+          db.tasks[idx] = payload;
+        }
+      } else {
+        payload.qcChecklist = [false, false, false, false, false, false, false];
+        db.tasks.unshift(payload);
+      }
+
+      saveDatabase();
+      closeTaskModal();
+      renderCurrentTab();
+    }
+
+    function deleteTask(id) {
+      if (!confirm('Hapus pekerjaan ini secara permanen?')) return;
+      db.tasks = db.tasks.filter(x => x.id !== id);
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    // Modal Proyek
+    function openProjectModal(projId = '') {
+      populateAllDropdowns();
+      const modal = document.getElementById('modal-project');
+      if (projId) {
+        const p = db.projects.find(x => x.id === projId);
+        if (!p) return;
+        document.getElementById('proj-id').value = p.id;
+        document.getElementById('proj-name').value = p.name;
+        document.getElementById('proj-client').value = p.client;
+        document.getElementById('proj-contract').value = p.contractNo || '';
+        document.getElementById('proj-start').value = p.startDate;
+        document.getElementById('proj-deadline').value = p.deadline;
+        document.getElementById('proj-pic').value = p.pic;
+        document.getElementById('proj-team').value = p.team || '';
+        document.getElementById('proj-status').value = p.status;
+        document.getElementById('proj-target').value = p.targetProgress || 80;
+        document.getElementById('proj-obstacle').value = p.obstacle || '';
+        document.getElementById('proj-notes').value = p.notes || '';
+      } else {
+        document.getElementById('proj-id').value = '';
+        document.getElementById('proj-name').value = '';
+        document.getElementById('proj-client').value = '';
+        document.getElementById('proj-contract').value = '';
+        document.getElementById('proj-start').value = getTodayWIB();
+        document.getElementById('proj-deadline').value = addDays(getTodayWIB(), 30);
+        document.getElementById('proj-team').value = '';
+        document.getElementById('proj-obstacle').value = '';
+        document.getElementById('proj-notes').value = '';
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeProjectModal() {
+      const modal = document.getElementById('modal-project');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveProjectForm(e) {
+      e.preventDefault();
+      const id = document.getElementById('proj-id').value;
+      const payload = {
+        id: id || 'P_' + Date.now(),
+        name: document.getElementById('proj-name').value.trim(),
+        client: document.getElementById('proj-client').value.trim(),
+        contractNo: document.getElementById('proj-contract').value.trim(),
+        startDate: document.getElementById('proj-start').value,
+        deadline: document.getElementById('proj-deadline').value,
+        pic: document.getElementById('proj-pic').value,
+        team: document.getElementById('proj-team').value.trim(),
+        status: document.getElementById('proj-status').value,
+        targetProgress: Number(document.getElementById('proj-target').value || 0),
+        obstacle: document.getElementById('proj-obstacle').value.trim(),
+        notes: document.getElementById('proj-notes').value.trim(),
+        history: [{ date: getTodayWIB(), text: 'Data proyek diperbarui oleh Team Leader.' }]
+      };
+      if (id) {
+        const idx = db.projects.findIndex(x => x.id === id);
+        if (idx > -1) {
+          payload.history = db.projects[idx].history || payload.history;
+          db.projects[idx] = payload;
+        }
+      } else {
+        db.projects.push(payload);
+      }
+      saveDatabase();
+      closeProjectModal();
+      renderCurrentTab();
+    }
+
+    function deleteProject(id) {
+      if (!confirm('Hapus proyek ini beserta kaitannya?')) return;
+      db.projects = db.projects.filter(x => x.id !== id);
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    // Modal Anggota Tim
+    function openMemberModal(memId = '') {
+      const modal = document.getElementById('modal-member');
+      if (memId) {
+        const m = db.members.find(x => x.id === memId);
+        if (!m) return;
+        document.getElementById('mem-id').value = m.id;
+        document.getElementById('mem-name').value = m.name;
+        document.getElementById('mem-role').value = m.role;
+        document.getElementById('mem-divisi').value = m.divisi;
+        document.getElementById('mem-eval').value = m.evalNotes || '';
+      } else {
+        document.getElementById('mem-id').value = '';
+        document.getElementById('mem-name').value = '';
+        document.getElementById('mem-role').value = '';
+        document.getElementById('mem-eval').value = '';
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeMemberModal() {
+      const modal = document.getElementById('modal-member');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveMemberForm(e) {
+      e.preventDefault();
+      const id = document.getElementById('mem-id').value;
+      const payload = {
+        id: id || 'M_' + Date.now(),
+        name: document.getElementById('mem-name').value.trim(),
+        role: document.getElementById('mem-role').value.trim(),
+        divisi: document.getElementById('mem-divisi').value,
+        evalNotes: document.getElementById('mem-eval').value.trim()
+      };
+      if (id) {
+        const idx = db.members.findIndex(x => x.id === id);
+        if (idx > -1) db.members[idx] = payload;
+      } else {
+        db.members.push(payload);
+      }
+      saveDatabase();
+      closeMemberModal();
+      renderCurrentTab();
+    }
+
+    // Modal Kendala & Keputusan
+    function openIssueModal(issId = '') {
+      populateAllDropdowns();
+      const modal = document.getElementById('modal-issue');
+      if (issId) {
+        const i = db.issues.find(x => x.id === issId);
+        if (!i) return;
+        document.getElementById('iss-id').value = i.id;
+        document.getElementById('iss-project').value = i.projectId;
+        document.getElementById('iss-category').value = i.category;
+        document.getElementById('iss-problem').value = i.problem;
+        document.getElementById('iss-pic').value = i.pic;
+        document.getElementById('iss-urgency').value = i.urgency;
+        document.getElementById('iss-impact').value = i.impact;
+        document.getElementById('iss-decision').value = i.decisionNeeded;
+        document.getElementById('iss-solution').value = i.solution || '';
+        document.getElementById('iss-target').value = i.targetDate;
+        document.getElementById('iss-status').value = i.status;
+      } else {
+        document.getElementById('iss-id').value = '';
+        document.getElementById('iss-problem').value = '';
+        document.getElementById('iss-impact').value = '';
+        document.getElementById('iss-decision').value = '';
+        document.getElementById('iss-solution').value = '';
+        document.getElementById('iss-target').value = getTodayWIB();
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeIssueModal() {
+      const modal = document.getElementById('modal-issue');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveIssueForm(e) {
+      e.preventDefault();
+      const id = document.getElementById('iss-id').value;
+      const payload = {
+        id: id || 'I_' + Date.now(),
+        projectId: document.getElementById('iss-project').value,
+        category: document.getElementById('iss-category').value,
+        problem: document.getElementById('iss-problem').value.trim(),
+        pic: document.getElementById('iss-pic').value,
+        urgency: document.getElementById('iss-urgency').value,
+        impact: document.getElementById('iss-impact').value.trim(),
+        reportedDate: getTodayWIB(),
+        decisionNeeded: document.getElementById('iss-decision').value.trim(),
+        solution: document.getElementById('iss-solution').value.trim(),
+        targetDate: document.getElementById('iss-target').value,
+        status: document.getElementById('iss-status').value
+      };
+      if (id) {
+        const idx = db.issues.findIndex(x => x.id === id);
+        if (idx > -1) db.issues[idx] = payload;
+      } else {
+        db.issues.unshift(payload);
+      }
+      saveDatabase();
+      closeIssueModal();
+      renderCurrentTab();
+    }
+
+    function deleteIssue(id) {
+      if (!confirm('Hapus data kendala ini?')) return;
+      db.issues = db.issues.filter(x => x.id !== id);
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    // Modal Penagihan
+    function openBillingModal(billId = '') {
+      populateAllDropdowns();
+      const modal = document.getElementById('modal-billing');
+      if (billId) {
+        const b = db.billings.find(x => x.id === billId);
+        if (!b) return;
+        document.getElementById('bill-id').value = b.id;
+        document.getElementById('bill-project').value = b.projectId;
+        document.getElementById('bill-client').value = b.client;
+        document.getElementById('bill-contract-val').value = b.contractVal;
+        document.getElementById('bill-term').value = b.term;
+        document.getElementById('bill-invoice-val').value = b.invoiceVal;
+        document.getElementById('bill-paid-val').value = b.paidVal;
+        document.getElementById('bill-submit-date').value = b.submitDate || '';
+        document.getElementById('bill-doc-status').value = b.docStatus;
+        document.getElementById('bill-pay-status').value = b.payStatus;
+        document.getElementById('bill-pic').value = b.pic;
+        document.getElementById('bill-followup-date').value = b.followUpDate;
+      } else {
+        document.getElementById('bill-id').value = '';
+        document.getElementById('bill-client').value = '';
+        document.getElementById('bill-contract-val').value = '';
+        document.getElementById('bill-term').value = '';
+        document.getElementById('bill-invoice-val').value = '';
+        document.getElementById('bill-paid-val').value = 0;
+        document.getElementById('bill-submit-date').value = getTodayWIB();
+        document.getElementById('bill-followup-date').value = addDays(getTodayWIB(), 3);
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeBillingModal() {
+      const modal = document.getElementById('modal-billing');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveBillingForm(e) {
+      e.preventDefault();
+      const id = document.getElementById('bill-id').value;
+      const payload = {
+        id: id || 'B_' + Date.now(),
+        projectId: document.getElementById('bill-project').value,
+        client: document.getElementById('bill-client').value.trim(),
+        contractVal: Number(document.getElementById('bill-contract-val').value || 0),
+        term: document.getElementById('bill-term').value.trim(),
+        invoiceVal: Number(document.getElementById('bill-invoice-val').value || 0),
+        paidVal: Number(document.getElementById('bill-paid-val').value || 0),
+        submitDate: document.getElementById('bill-submit-date').value,
+        docStatus: document.getElementById('bill-doc-status').value,
+        payStatus: document.getElementById('bill-pay-status').value,
+        pic: document.getElementById('bill-pic').value,
+        followUpDate: document.getElementById('bill-followup-date').value
+      };
+      if (id) {
+        const idx = db.billings.findIndex(x => x.id === id);
+        if (idx > -1) db.billings[idx] = payload;
+      } else {
+        db.billings.push(payload);
+      }
+      saveDatabase();
+      closeBillingModal();
+      renderCurrentTab();
+    }
+
+    function deleteBilling(id) {
+      if (!confirm('Hapus data termin penagihan ini?')) return;
+      db.billings = db.billings.filter(x => x.id !== id);
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    // ==========================================
+    // EKSPOR CSV, EXCEL, DAN BACKUP/RESTORE JSON
+    // ==========================================
+    function exportTasksCSV() {
+      const headers = ['ID', 'Nama Pekerjaan', 'Proyek', 'Tahapan', 'Divisi', 'PIC', 'Mulai', 'Deadline', 'Prioritas', 'Status', 'Progress (%)', 'Kendala', 'Tindakan Berikutnya'];
+      const rows = db.tasks.map(t => [
+        t.id,
+        `"${(t.name || '').replace(/"/g, '""')}"`,
+        `"${getProjectName(t.projectId).replace(/"/g, '""')}"`,
+        `"${t.stage}"`,
+        `"${t.divisi}"`,
+        `"${t.pic || ''}"`,
+        t.startDate || '',
+        t.deadline || '',
+        t.priority,
+        t.status,
+        computeTaskProgress(t),
+        `"${(t.obstacle || '').replace(/"/g, '""')}"`,
+        `"${(t.nextAction || '').replace(/"/g, '""')}"`
+      ]);
+      const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `Laporan_Pekerjaan_Salsabila_${getTodayWIB()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function exportReportExcel() {
+      const content = document.getElementById('printable-report-area').innerHTML;
+      const blob = new Blob(['\ufeff', `<html><head><meta charset="UTF-8"></head><body>${content}</body></html>`], {
+        type: 'application/vnd.ms-excel'
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Laporan_Eksekutif_Salsabila_${getTodayWIB()}.xls`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadBackupJSON() {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(db, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute('href', dataStr);
+      a.setAttribute('download', `Backup_SalsabilaControlCenter_${getTodayWIB()}.json`);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function restoreBackupJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && Array.isArray(parsed.tasks) && Array.isArray(parsed.projects)) {
+            db = parsed;
+            saveDatabase();
+            renderCurrentTab();
+            alert('Data cadangan berhasil dipulihkan!');
+          } else {
+            alert('Format file JSON tidak sesuai dengan struktur Salsabila Control Center.');
+          }
+        } catch (err) {
+          alert('Gagal membaca file JSON.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetToSampleData() {
+      if (!confirm('Muat ulang data contoh realistis CV. Design Salsabila? Perubahan lokal saat ini akan ditimpa.')) return;
+      db = getInitialSampleData();
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    function clearAllData() {
+      if (!confirm('Hapus seluruh data contoh dan mulai dari database kosong? Pastikan Anda sudah mengunduh Backup JSON jika diperlukan.')) return;
+      db = {
+        members: [{ id: 'M1', name: 'Nurul Ilmi, S.Ars', role: 'Team Leader', divisi: 'Arsitektur', evalNotes: '' }],
+        projects: [],
+        tasks: [],
+        issues: [],
+        billings: [],
+        dailyAgenda: {}
+      };
+      saveDatabase();
+      renderCurrentTab();
+    }
+
+    // Inisialisasi Saat Halaman Dimuat
+    window.addEventListener('DOMContentLoaded', () => {
+      loadDatabase();
+      updateClockWIB();
+      setInterval(updateClockWIB, 1000);
+      document.getElementById('agenda-date-picker').value = getTodayWIB();
+      switchTab('dashboard');
+    });
+  </script>
+</body>
+</html>
