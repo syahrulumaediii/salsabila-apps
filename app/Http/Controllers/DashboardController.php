@@ -20,7 +20,7 @@ class DashboardController extends Controller
 
         // All tasks with project, pic, subtasks, qcReview
         $tasks = Task::with(['project', 'pic', 'subtasks', 'qcReview'])->get();
-        $projects = Project::with(['pic', 'tasks.subtasks', 'historyLogs'])->get();
+        $projects = Project::with(['pic', 'tasks.subtasks'])->get();
         $billings = Billing::with(['project', 'pic'])->get();
         $issues = Issue::with(['project', 'reporter'])->get();
         $users = User::all();

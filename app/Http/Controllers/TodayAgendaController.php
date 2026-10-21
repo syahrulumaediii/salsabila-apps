@@ -73,13 +73,7 @@ class TodayAgendaController extends Controller
                 'qc' => $qcTasks,
                 'followUp' => $followUpTasks,
             ],
-            'sidebarBadges' => [
-                'alerts' => $tasks->filter(fn ($t) => $t->is_overdue)->count(),
-                'today' => $dueTasks->count(),
-                'todos' => $tasks->where('status', '!=', 'Selesai')->count(),
-                'review' => $qcTasks->count(),
-                'issues' => 0,
-            ],
+            'sidebarBadges' => Task::getSidebarBadges(),
         ]);
     }
 

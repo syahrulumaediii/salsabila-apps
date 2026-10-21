@@ -52,6 +52,35 @@ class Task extends Model
         return $this->hasOne(TaskQcReview::class);
     }
 
+    /**
+     * Get aggregate sidebar badge counts in a single efficient query.
+     *
+     * @return array<string, int>
+     */
+    public static function getSidebarBadges(): array
+    {
+        $today = Carbon::today()->format('Y-m-d');
+
+        $stats = static::query()
+            ->selectRaw("
+                COUNT(CASE WHEN status != 'Selesai' AND deadline IS NOT NULL AND deadline < ? THEN 1 END) as alerts,
+                COUNT(CASE WHEN status != 'Selesai' AND deadline = ? THEN 1 END) as today,
+                COUNT(CASE WHEN status != 'Selesai' THEN 1 END) as todos,
+                COUNT(CASE WHEN status = 'Menunggu Pemeriksaan' THEN 1 END) as review
+            ", [$today, $today])
+            ->first();
+
+        $issueCount = Issue::where('status', '!=', 'Selesai Teratasi')->count();
+
+        return [
+            'alerts' => (int) ($stats->alerts ?? 0) + $issueCount,
+            'today' => (int) ($stats->today ?? 0),
+            'todos' => (int) ($stats->todos ?? 0),
+            'review' => (int) ($stats->review ?? 0),
+            'issues' => $issueCount,
+        ];
+    }
+
     protected function computedProgress(): Attribute
     {
         return Attribute::make(
@@ -61,8 +90,8 @@ class Task extends Model
                 }
 
                 if (! $this->manual_progress_mode) {
-                    $subtasks = $this->relationLoaded('subtasks') ? $this->subtasks : $this->subtasks()->get();
-                    if ($subtasks->isNotEmpty()) {
+                    $subtasks = $this->relationLoaded('subtasks') ? $this->subtasks : null;
+                    if ($subtasks && $subtasks->isNotEmpty()) {
                         $doneCount = $subtasks->where('is_done', true)->count();
 
                         return (int) round(($doneCount / $subtasks->count()) * 100);

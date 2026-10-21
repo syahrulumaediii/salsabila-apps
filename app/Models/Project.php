@@ -62,8 +62,8 @@ class Project extends Model
     {
         return Attribute::make(
             get: function (): int {
-                $tasks = $this->relationLoaded('tasks') ? $this->tasks : $this->tasks()->with('subtasks')->get();
-                if ($tasks->isEmpty()) {
+                $tasks = $this->relationLoaded('tasks') ? $this->tasks : null;
+                if (! $tasks || $tasks->isEmpty()) {
                     return 0;
                 }
 

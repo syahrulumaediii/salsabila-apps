@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -77,13 +76,7 @@ class MatrixController extends Controller
             'projects' => $projects,
             'users' => $users,
             'filters' => $request->only(['search', 'project_id', 'stage', 'pic_user_id', 'status', 'date_from', 'date_to', 'sort']),
-            'sidebarBadges' => [
-                'alerts' => Task::all()->filter(fn ($t) => $t->is_overdue)->count(),
-                'today' => Task::where('deadline', Carbon::today()->format('Y-m-d'))->where('status', '!=', 'Selesai')->count(),
-                'todos' => Task::where('status', '!=', 'Selesai')->count(),
-                'review' => Task::where('status', 'Menunggu Pemeriksaan')->count(),
-                'issues' => 0,
-            ],
+            'sidebarBadges' => Task::getSidebarBadges(),
         ]);
     }
 }

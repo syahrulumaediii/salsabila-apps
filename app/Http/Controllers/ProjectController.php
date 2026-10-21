@@ -22,13 +22,7 @@ class ProjectController extends Controller
         return Inertia::render('Projects/Index', [
             'projects' => $projects,
             'users' => $users,
-            'sidebarBadges' => [
-                'alerts' => Task::all()->filter(fn ($t) => $t->is_overdue)->count(),
-                'today' => Task::where('deadline', Carbon::today()->format('Y-m-d'))->where('status', '!=', 'Selesai')->count(),
-                'todos' => Task::where('status', '!=', 'Selesai')->count(),
-                'review' => Task::where('status', 'Menunggu Pemeriksaan')->count(),
-                'issues' => 0,
-            ],
+            'sidebarBadges' => Task::getSidebarBadges(),
         ]);
     }
 

@@ -25,6 +25,7 @@ const props = defineProps({
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user || {});
+const activeBadges = computed(() => props.badges || page.props.sidebarBadges || {});
 
 // Responsive Sidebar States
 const desktopCollapsed = ref(false);
@@ -175,6 +176,7 @@ function onSearchInput() {
                         <template v-for="item in navItems" :key="item.routeName">
                             <Link
                                 :href="route().has(item.routeName) ? route(item.routeName) : '#'"
+                                prefetch
                                 @click="mobileDrawerOpen = false"
                                 :class="[
                                     'w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition',
@@ -188,13 +190,13 @@ function onSearchInput() {
                                     {{ item.name }}
                                 </span>
                                 <span
-                                    v-if="item.badgeKey && badges[item.badgeKey] > 0"
+                                    v-if="item.badgeKey && activeBadges[item.badgeKey] > 0"
                                     :class="[
                                         'px-1.5 py-0.5 text-[10px] rounded-full font-bold',
                                         item.badgeColor || 'bg-sky-500 text-white'
                                     ]"
                                 >
-                                    {{ badges[item.badgeKey] }}
+                                    {{ activeBadges[item.badgeKey] }}
                                 </span>
                             </Link>
                         </template>
@@ -264,6 +266,7 @@ function onSearchInput() {
                     <template v-for="item in navItems" :key="item.routeName">
                         <Link
                             :href="route().has(item.routeName) ? route(item.routeName) : '#'"
+                            prefetch
                             :title="item.name"
                             :class="[
                                 'w-full flex items-center rounded-xl text-xs font-medium transition relative group',
@@ -280,18 +283,18 @@ function onSearchInput() {
 
                             <!-- Full Badge -->
                             <span
-                                v-if="!desktopCollapsed && item.badgeKey && badges[item.badgeKey] > 0"
+                                v-if="!desktopCollapsed && item.badgeKey && activeBadges[item.badgeKey] > 0"
                                 :class="[
                                     'px-1.5 py-0.5 text-[10px] rounded-full font-bold shadow-xs',
                                     item.badgeColor || 'bg-sky-500 text-white'
                                 ]"
                             >
-                                {{ badges[item.badgeKey] }}
+                                {{ activeBadges[item.badgeKey] }}
                             </span>
 
                             <!-- Collapsed Tiny Dot Badge -->
                             <span
-                                v-if="desktopCollapsed && item.badgeKey && badges[item.badgeKey] > 0"
+                                v-if="desktopCollapsed && item.badgeKey && activeBadges[item.badgeKey] > 0"
                                 class="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-slate-900"
                             ></span>
 

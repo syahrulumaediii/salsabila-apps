@@ -45,13 +45,7 @@ class IssueController extends Controller
             'users' => $users,
             'categories' => self::CATEGORIES,
             'filters' => $request->only(['category']),
-            'sidebarBadges' => [
-                'alerts' => Task::all()->filter(fn ($t) => $t->is_overdue)->count(),
-                'today' => Task::where('deadline', Carbon::today()->format('Y-m-d'))->where('status', '!=', 'Selesai')->count(),
-                'todos' => Task::where('status', '!=', 'Selesai')->count(),
-                'review' => Task::where('status', 'Menunggu Pemeriksaan')->count(),
-                'issues' => $issues->where('status', '!=', 'Selesai Teratasi')->count(),
-            ],
+            'sidebarBadges' => Task::getSidebarBadges(),
         ]);
     }
 
