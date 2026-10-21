@@ -36,7 +36,7 @@ class TaskController extends Controller
         if ($request->filled('divisi') && $request->divisi !== 'ALL') {
             $query->where('divisi', $request->divisi);
         }
-
+        
         if ($request->filled('pic_user_id') && $request->pic_user_id !== 'ALL') {
             $query->where('pic_user_id', $request->pic_user_id);
         }
@@ -115,14 +115,17 @@ class TaskController extends Controller
             'subtasks_text' => 'nullable|string',
         ]);
 
+        $subtasksText = $validated['subtasks_text'] ?? null;
+        unset($validated['subtasks_text']);
+
         $validated['last_updated_date'] = Carbon::today()->format('Y-m-d');
         $validated['code'] = 'T'.(Task::count() + 1);
 
         $task = Task::create($validated);
 
         // Process Subtasks from text if provided
-        if (! empty($validated['subtasks_text'])) {
-            $lines = explode("\n", str_replace("\r", '', $validated['subtasks_text']));
+        if (! empty($subtasksText)) {
+            $lines = explode("\n", str_replace("\r", '', $subtasksText));
             $order = 1;
             foreach ($lines as $line) {
                 $trimmed = trim($line);
@@ -172,23 +175,33 @@ class TaskController extends Controller
             'subtasks_text' => 'nullable|string',
         ]);
 
+        $subtasksText = $validated['subtasks_text'] ?? null;
+        $hasSubtasksText = array_key_exists('subtasks_text', $validated);
+        unset($validated['subtasks_text']);
+
         $validated['last_updated_date'] = Carbon::today()->format('Y-m-d');
         $task->update($validated);
 
-        // If new subtasks text provided and subtasks currently empty, add them
-        if (! empty($validated['subtasks_text']) && $task->subtasks()->count() === 0) {
-            $lines = explode("\n", str_replace("\r", '', $validated['subtasks_text']));
+        // If subtasks text is provided, sync subtasks
+        if ($hasSubtasksText) {
+            $lines = array_values(array_filter(
+                array_map('trim', explode("\n", str_replace("\r", '', $subtasksText ?? ''))),
+                fn ($line) => $line !== ''
+            ));
+
+            $existing = $task->subtasks()->get();
+            $existingDoneTitles = $existing->where('is_done', true)->pluck('title')->toArray();
+
+            $task->subtasks()->delete();
+
             $order = 1;
             foreach ($lines as $line) {
-                $trimmed = trim($line);
-                if (! empty($trimmed)) {
-                    Subtask::create([
-                        'task_id' => $task->id,
-                        'title' => $trimmed,
-                        'is_done' => false,
-                        'order' => $order++,
-                    ]);
-                }
+                Subtask::create([
+                    'task_id' => $task->id,
+                    'title' => $line,
+                    'is_done' => in_array($line, $existingDoneTitles, true),
+                    'order' => $order++,
+                ]);
             }
         }
 

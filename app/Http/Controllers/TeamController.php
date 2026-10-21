@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,7 +21,7 @@ class TeamController extends Controller
             $userTasks = $u->tasks;
             $activeCount = $userTasks->where('status', '!=', 'Selesai')->count();
             $doneCount = $userTasks->where('status', 'Selesai')->count();
-            $overdueCount = $userTasks->filter(fn ($t) => $t->is_overdue)->count();
+            $overdueCount = $userTasks->filter(fn($t) => $t->is_overdue)->count();
             $total = $userTasks->count();
             $onTimeRate = $total > 0 ? round((($total - $overdueCount) / $total) * 100) : 100;
 
@@ -88,7 +89,7 @@ class TeamController extends Controller
 
     public function destroy(User $team): RedirectResponse
     {
-        if ($team->id === auth()->id()) {
+        if ($team->id === Auth::id()) {
             return back()->withErrors(['message' => 'Anda tidak dapat menghapus akun Anda sendiri.']);
         }
 
